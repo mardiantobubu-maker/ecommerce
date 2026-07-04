@@ -242,7 +242,7 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
             {/* <!-- header top left --> */}
             <div className="xl:w-auto flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full lg:flex-1 xl:flex-none">
               <div className="flex items-center justify-between w-full sm:w-auto sm:flex-shrink-0 lg:w-auto">
-                <Link className="flex-shrink-0 block" href="/">
+                <Link className="flex-shrink-0 block outline-none focus:outline-none" href="/">
                     <Image
                       src="/images/logo/logo.svg"
                       alt="Logo"
