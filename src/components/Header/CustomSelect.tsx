@@ -32,7 +32,7 @@ const CustomSelect = ({ options, value, onChange }) => {
   }, [isOpen]);
 
   return (
-    <div ref={dropdownRef} className="dropdown-content custom-select relative min-w-[140px] xsm:min-w-[160px] sm:min-w-[200px]">
+    <div ref={dropdownRef} className="dropdown-content custom-select relative w-full">
       <div
         className={`select-selected w-full whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer px-2 xsm:px-4 py-2.5 bg-gray-1 border border-gray-3 rounded-l-[5px] text-base ${
           isOpen ? "select-arrow-active" : ""
