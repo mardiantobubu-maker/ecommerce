@@ -72,7 +72,7 @@ const BottomNav = () => {
 
   return (
     <div
-      className="lg:hidden fixed bottom-0 left-0 z-[999] w-full bg-white pb-4 pt-2 px-2 border-t border-gray-2 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]"
+      className="xl:hidden fixed bottom-0 left-0 z-[999] w-full bg-white pb-4 pt-2 px-2 border-t border-gray-2 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]"
       style={{ transform: "translateZ(0)", WebkitTransform: "translateZ(0)" }}
     >
       <ul className="flex items-center justify-between pb-2">

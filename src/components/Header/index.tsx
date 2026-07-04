@@ -218,7 +218,7 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
                 </Link>
 
                 {/* Mobile Actions (Cart, Notifications & Hamburger) */}
-                <div className="flex items-center gap-5 lg:hidden pr-3">
+                <div className="flex items-center gap-5 xl:hidden pr-3">
                   <button
                     onClick={handleOpenCartModal}
                     aria-label="Buka keranjang belanja"
@@ -319,8 +319,8 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
               </div>
             </div>
 
-            {/* <!-- header top right (Hidden on Mobile) --> */}
-            <div className="hidden lg:flex w-full lg:w-auto items-center gap-7.5 flex-shrink-0">
+            {/* <!-- header top right (Hidden on Mobile and iPad Pro) --> */}
+            <div className="hidden xl:flex w-full xl:w-auto items-center gap-7.5 flex-shrink-0">
 
 
               <div className="flex w-full lg:w-auto justify-between items-center gap-10">
