@@ -50,7 +50,7 @@ const Testimonials = () => {
   if (loading) return null;
 
   return (
-    <section className="overflow-hidden mt-0 pt-4 pb-10 lg:pt-15">
+    <section className="mt-0 pt-4 pb-10 lg:pt-15">
       <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-8 xl:px-6 2xl:px-0">
         <div className="">
           <div className="swiper testimonial-carousel common-carousel p-5">
@@ -91,7 +91,7 @@ const Testimonials = () => {
               spaceBetween={20}
               breakpoints={{
                 0: { slidesPerView: 1 },
-                768: { slidesPerView: 2 },
+                640: { slidesPerView: 2 },
                 1200: { slidesPerView: 3 },
               }}
             >
