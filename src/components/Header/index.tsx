@@ -202,7 +202,7 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
               }`}
           >
             {/* <!-- header top left --> */}
-            <div className="xl:w-auto flex flex-col sm:flex-row items-center gap-5 sm:gap-10 w-full lg:flex-1 xl:flex-none">
+            <div className="xl:w-auto flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full lg:flex-1 xl:flex-none">
               <div className="flex items-center justify-between w-full sm:w-auto sm:flex-shrink-0 lg:w-auto">
                 <Link className="flex-shrink-0 block" href="/">
                     <Image
@@ -288,7 +288,7 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
                         type="search"
                         name="search"
                         id="search"
-                        placeholder="Saya mencari..."
+                        placeholder="Cari Seragam..."
                         autoComplete="off"
                         className="w-full bg-transparent border-none py-2.5 pl-3 sm:pl-4 pr-10 outline-none ease-in duration-200 text-base placeholder:text-base text-dark"
                       />
