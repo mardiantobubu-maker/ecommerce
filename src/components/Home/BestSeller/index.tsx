@@ -86,7 +86,7 @@ const BestSeller = ({ initialBestSellers }: { initialBestSellers?: Product[] }) 
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-7">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 xl:gap-7">
           {loading ? (
             Array(4).fill(0).map((_, i) => (
               <div key={i}>
