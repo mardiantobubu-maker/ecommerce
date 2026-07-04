@@ -259,7 +259,7 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
               <div className="flex-1 w-full lg:max-w-none xl:max-w-[480px] relative z-[70]">
                 <form onSubmit={handleSearch}>
                   <div className="search-wrapper flex items-center w-full bg-white border border-gray-3/60 rounded-[8px] shadow-sm relative">
-                    <div className="flex-none w-[170px] xsm:w-[190px] sm:w-[230px]">
+                    <div className="flex-none w-[130px] xsm:w-[150px] sm:w-[150px] lg:w-[160px] xl:w-[230px]">
                       <CustomSelect
                         options={options}
                         value={selectedCategory}
