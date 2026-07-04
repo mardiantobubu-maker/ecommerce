@@ -58,7 +58,7 @@ const Categories = ({ initialCategories }: { initialCategories?: any[] }) => {
 
 
   return (
-    <section className="overflow-hidden mt-0 pt-4 lg:pt-6 xl:pt-8">
+    <section className="mt-0 pt-4 lg:pt-6 xl:pt-8">
       <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-8 xl:px-6 2xl:px-0 pb-4 lg:pb-15 overflow-x-hidden">
         <div className="swiper categories-carousel common-carousel">
           {/* <!-- section title --> */}

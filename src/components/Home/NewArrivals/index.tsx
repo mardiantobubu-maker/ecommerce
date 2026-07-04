@@ -70,7 +70,7 @@ const NewArrival = ({ initialNewArrivals }: { initialNewArrivals?: Product[] }) 
   }, []);
 
   return (
-    <section className="overflow-hidden mt-0 pt-4 lg:pt-15">
+    <section className="mt-0 pt-4 lg:pt-15">
       <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-8 xl:px-6 2xl:px-0">
         <div className="mb-7 flex items-center justify-between">
           <div>

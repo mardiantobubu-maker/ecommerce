@@ -26,7 +26,7 @@ const PromoBanner = () => {
   const smallBanner2 = banners.find(b => b.type === 'SMALL_2') || banners[2];
 
   return (
-    <section className="overflow-hidden mt-0 pt-4 pb-0 lg:py-20 bg-white">
+    <section className="mt-0 pt-4 pb-0 lg:py-20 bg-white">
       <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-8 xl:px-6 2xl:px-0">
         {/* Desktop Layout */}
         <div className="hidden lg:block">

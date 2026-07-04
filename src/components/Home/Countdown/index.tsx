@@ -89,7 +89,7 @@ const CounDown = () => {
   if (!promo || isExpired) return null;
 
   return (
-    <section className="overflow-hidden mt-0 pt-4 pb-0 lg:py-20">
+    <section className="mt-0 pt-4 pb-0 lg:py-20">
       <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-8 xl:px-6 2xl:px-0">
         <div className="relative overflow-hidden z-1 rounded-[10px] bg-[#D0E9F3] p-6 sm:p-7.5 lg:p-10 xl:p-15 shadow-sm border border-gray-3">
           <div className="max-w-[422px] w-full">

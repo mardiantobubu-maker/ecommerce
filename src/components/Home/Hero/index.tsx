@@ -9,7 +9,7 @@ const Hero = ({ initialBanners = [] }: { initialBanners?: any[] }) => {
   const sidebarBottom = initialBanners.find(b => b.type === 'HERO_SIDEBAR_BOTTOM');
 
   return (
-    <section className="overflow-hidden pt-[170px] px-0 pb-[16px] sm:pt-[100px] lg:pt-[160px] xl:pt-[190px] bg-white">
+    <section className="pt-[170px] px-0 pb-[16px] sm:pt-[100px] lg:pt-[160px] xl:pt-[190px] bg-white">
       <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-8 xl:px-6 2xl:px-0 overflow-x-hidden">
         <div className="flex flex-col lg:flex-row gap-5 items-stretch lg:h-[480px]">
           {/* Mobile + Tablet Slider (< lg) */}
