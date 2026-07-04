@@ -78,7 +78,7 @@ const PromoBanner = () => {
               className="relative z-1 overflow-hidden rounded-[10px] py-10 xl:py-16 px-4 sm:px-7.5 xl:px-10 flex flex-col sm:block shadow-sm border border-gray-3"
               style={{ backgroundColor: smallBanner1?.bg_color || "#DBF4F3" }}
             >
-              <div className="relative sm:absolute sm:top-1/2 sm:-translate-y-1/2 sm:left-3 lg:sm:left-10 z-0 sm:-z-1 mt-6 sm:mt-0">
+              <div className="relative sm:absolute sm:top-1/2 sm:-translate-y-1/2 sm:left-3 lg:-left-6 xl:left-10 z-0 sm:-z-1 mt-6 sm:mt-0">
                 {smallBanner1?.image_url && (
                   <Image
                     src={smallBanner1.image_url}
@@ -91,7 +91,7 @@ const PromoBanner = () => {
                 )}
               </div>
 
-              <div className="text-center sm:text-right relative z-10 max-w-[250px] sm:max-w-[280px] lg:max-w-[320px] ml-auto">
+              <div className="text-center sm:text-right relative z-10 max-w-[250px] sm:max-w-[280px] lg:max-w-[260px] xl:max-w-[320px] ml-auto">
                 <span className="block text-lg text-dark mb-1.5">
                   {smallBanner1?.subtitle}
                 </span>
@@ -118,7 +118,7 @@ const PromoBanner = () => {
               className="relative z-1 overflow-hidden rounded-[10px] py-10 xl:py-16 px-4 sm:px-7.5 xl:px-10 flex flex-col sm:block shadow-sm border border-gray-3"
               style={{ backgroundColor: smallBanner2?.bg_color || "#FFECE1" }}
             >
-              <div className="relative sm:absolute sm:top-1/2 sm:-translate-y-1/2 sm:right-3 lg:sm:right-8.5 z-0 sm:-z-1 mt-6 sm:mt-0">
+              <div className="relative sm:absolute sm:top-1/2 sm:-translate-y-1/2 sm:right-3 lg:-right-6 xl:right-8.5 z-0 sm:-z-1 mt-6 sm:mt-0">
                 {smallBanner2?.image_url && (
                   <Image
                     src={smallBanner2.image_url}
@@ -131,7 +131,7 @@ const PromoBanner = () => {
                 )}
               </div>
 
-              <div className="relative z-10 max-w-[250px] sm:max-w-[280px] lg:max-w-[320px]">
+              <div className="relative z-10 max-w-[250px] sm:max-w-[280px] lg:max-w-[260px] xl:max-w-[320px]">
                 <span className="block text-lg text-dark mb-1.5">
                   {smallBanner2?.subtitle}
                 </span>

@@ -202,9 +202,9 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
               }`}
           >
             {/* <!-- header top left --> */}
-            <div className="xl:w-auto flex flex-col sm:flex-row items-center gap-5 sm:gap-10">
-              <div className="flex items-center justify-between w-full lg:w-auto">
-                <Link className="flex-shrink-0" href="/">
+            <div className="xl:w-auto flex flex-col sm:flex-row items-center gap-5 sm:gap-10 w-full lg:flex-1 xl:flex-none">
+              <div className="flex items-center justify-between w-full sm:w-auto sm:flex-shrink-0 lg:w-auto">
+                <Link className="flex-shrink-0 block" href="/">
                     <Image
                       src="/images/logo/logo.svg"
                       alt="Logo"
@@ -256,7 +256,7 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
                 </div>
               </div>
 
-              <div className="lg:max-w-[480px] w-full relative z-[70]">
+              <div className="flex-1 w-full lg:max-w-none xl:max-w-[480px] relative z-[70]">
                 <form onSubmit={handleSearch}>
                   <div className="search-wrapper flex items-center w-full bg-white border border-gray-3/60 rounded-[8px] shadow-sm relative">
                     <div className="flex-none w-[170px] xsm:w-[190px] sm:w-[230px]">
@@ -325,7 +325,7 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
 
               <div className="flex w-full lg:w-auto justify-between items-center gap-10">
                 <div className="flex items-center gap-8 ml-4">
-                  <div className="flex items-center gap-2.5">
+                  <div className="hidden xl:flex items-center gap-2.5">
                     <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-blue/20 bg-blue/5 flex items-center justify-center transition-all hover:border-blue/50">
                       {session ? (
                         session.user.user_metadata?.custom_avatar_url || session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture ? (
