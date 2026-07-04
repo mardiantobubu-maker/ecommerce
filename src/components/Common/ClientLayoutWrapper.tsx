@@ -48,7 +48,7 @@ export default function ClientLayoutWrapper({
             <ModalProvider>
               <PreviewSliderProvider>
                 <Header initialCategories={initialCategories} />
-                <main className="pb-[80px] lg:pb-0">{children}</main>
+                <main className="pb-[80px] xl:pb-0">{children}</main>
 
                 <GlobalModals />
               </PreviewSliderProvider>
@@ -56,7 +56,7 @@ export default function ClientLayoutWrapper({
           </CartModalProvider>
           <BottomNav />
           <ScrollToTop />
-          <div className="hidden lg:block">
+          <div className="hidden xl:block">
             <Footer />
           </div>
           <Toaster
