@@ -63,18 +63,18 @@ const Hero = ({ initialBanners = [] }: { initialBanners?: any[] }) => {
               {[sidebarTop, sidebarBottom].map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex-1 relative rounded-[10px] p-5 flex flex-col justify-center shadow-sm border border-gray-3 overflow-hidden"
+                  className="flex-1 relative rounded-[10px] p-5 lg:p-6 xl:p-8 flex flex-col justify-center shadow-sm border border-gray-3 overflow-hidden"
                   style={{ backgroundColor: item?.bg_color || "#ffffff" }}
                 >
                   <div className="flex items-center justify-between gap-2 h-full">
-                    <div className="relative z-10 w-[60%]">
-                      <h2 className="font-bold text-dark text-lg mb-2 leading-tight">
+                    <div className="relative z-10 w-[55%]">
+                      <h2 className="font-bold text-dark text-xl xl:text-2xl mb-3 leading-tight">
                         <Link href={item?.button_link || "#"}>{item?.title || "Promo Item"}</Link>
                       </h2>
-                      <p className="font-medium text-[#212121] text-xs mb-1 opacity-70">{item?.subtitle || ""}</p>
-                      <span className="font-black text-lg text-red">{item?.discount_text || ""}</span>
+                      <p className="font-medium text-[#212121] text-sm xl:text-base mb-2 opacity-70">{item?.subtitle || ""}</p>
+                      <span className="font-black text-2xl xl:text-3xl text-red">{item?.discount_text || ""}</span>
                     </div>
-                    <div className="relative w-[40%] h-full">
+                    <div className="relative w-[45%] h-full">
                       <Image src={item?.image_url || "/images/products/terbaru-seragam-sd.png"} alt="promo" fill className="object-contain object-right" />
                     </div>
                   </div>
