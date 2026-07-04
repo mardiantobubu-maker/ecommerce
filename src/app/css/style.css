@@ -153,7 +153,7 @@ input[type='search']::-webkit-search-results-decoration {
 }
 
 .search-wrapper .select-selected:after {
-  @apply right-3 sm:right-4;
+  right: 16px !important;
 }
 
 .select-items {
