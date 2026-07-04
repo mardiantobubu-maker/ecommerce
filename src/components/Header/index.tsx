@@ -293,7 +293,7 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
                         type="search"
                         name="search"
                         id="search"
-                        placeholder="Cari Seragam..."
+                        placeholder="Seragam..."
                         autoComplete="off"
                         className="w-full bg-transparent border-none py-2.5 pl-3 sm:pl-4 pr-10 outline-none ease-in duration-200 text-base placeholder:text-base text-dark"
                       />
