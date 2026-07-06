@@ -1,4 +1,4 @@
-import Image from "next/image";
+import ImageWithSkeleton from "@/components/Common/ImageWithSkeleton";
 import Link from "next/link";
 
 const HeroCarousel = ({ banners = [] }: { banners?: any[] }) => {
@@ -45,7 +45,7 @@ const HeroCarousel = ({ banners = [] }: { banners?: any[] }) => {
 
             {/* Image Section — prominent on mobile, fills remaining space on desktop */}
             <div className="relative w-full h-[180px] sm:flex-1 sm:h-full flex-shrink-0">
-              <Image
+              <ImageWithSkeleton
                 src="/images/hero/seragam-sekolah-kualitas-terbaik.png"
                 alt="seragam sekolah kualitas terbaik"
                 fill
@@ -54,7 +54,8 @@ const HeroCarousel = ({ banners = [] }: { banners?: any[] }) => {
                 fetchPriority="high"
                 sizes="(max-width: 640px) 250px, (max-width: 1024px) 400px, 480px"
                 quality={70}
-                className="object-contain object-bottom transition-transform duration-500"
+                className="object-contain object-bottom transition-transform duration-500 relative z-10"
+                skeletonClassName="rounded-[10px]"
               />
             </div>
           </div>
@@ -110,7 +111,7 @@ const HeroCarousel = ({ banners = [] }: { banners?: any[] }) => {
           {/* Image Section — prominent on mobile, fills remaining space on desktop */}
           <div className="relative w-full h-[180px] sm:flex-1 sm:h-full flex-shrink-0">
             {activeBanner.image_url && (
-              <Image
+              <ImageWithSkeleton
                 src={activeBanner.image_url}
                 alt={activeBanner.title}
                 fill
@@ -119,7 +120,8 @@ const HeroCarousel = ({ banners = [] }: { banners?: any[] }) => {
                 fetchPriority="high"
                 sizes="(max-width: 640px) 250px, (max-width: 1024px) 400px, 480px"
                 quality={70}
-                className="object-contain object-bottom transition-transform duration-700 hover:scale-105"
+                className="object-contain object-bottom transition-transform duration-700 hover:scale-105 relative z-10"
+                skeletonClassName="rounded-[10px]"
               />
             )}
           </div>

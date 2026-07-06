@@ -232,7 +232,7 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
     >
 
 
-      <div className="w-full border-b border-gray-3">
+      <div className="w-full border-b border-gray-3" style={{ overflowX: 'clip' }}>
         <div className="max-w-[1280px] mx-auto px-4 sm:px-7.5 xl:px-6 2xl:px-0 relative z-[60]">
           {/* <!-- header top start --> */}
           <div
@@ -330,11 +330,11 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
             </div>
 
             {/* <!-- header top right (Hidden on Mobile and iPad Pro) --> */}
-            <div className="hidden xl:flex w-full xl:w-auto items-center gap-7.5 flex-shrink-0">
+            <div className="hidden xl:flex w-full xl:w-auto items-center gap-3">
 
 
-              <div className="flex w-full lg:w-auto justify-between items-center gap-10">
-                <div className="flex items-center gap-8 ml-4">
+              <div className="flex w-full lg:w-auto justify-between items-center gap-3">
+                <div className="flex items-center gap-3">
                   <div className="hidden xl:flex items-center gap-2.5">
                     <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-blue/20 bg-blue/5 flex items-center justify-center transition-all hover:border-blue/50">
                       {session ? (
@@ -381,7 +381,7 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
                   </div>
 
                   {/* <!-- Divider --> */}
-                  <span className="hidden xl:block w-px h-7.5 bg-gray-4 mx-2"></span>
+                  <span className="hidden xl:block w-px h-7.5 bg-gray-4 mx-1"></span>
 
                   {/* <!-- Favorites --> */}
                   <Link
@@ -402,7 +402,7 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
                       >
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                       </svg>
-                      <span suppressHydrationWarning className="flex items-center justify-center font-bold text-xs absolute -right-1.5 -top-1.5 bg-blue w-5.5 h-5.5 rounded-full text-white ring-2 ring-white shadow-sm">
+                      <span suppressHydrationWarning className="flex items-center justify-center font-bold text-xs absolute -right-0.5 -top-0.5 bg-blue w-5 h-5 rounded-full text-white ring-2 ring-white shadow-sm">
                         {mounted ? wishlist.length : 0}
                       </span>
                     </div>
@@ -417,13 +417,13 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
                   </Link>
 
                   {/* <!-- Divider behind Favorites --> */}
-                  <span className="hidden xl:block w-px h-7.5 bg-gray-4 mx-2"></span>
+                  <span className="hidden xl:block w-px h-7.5 bg-gray-4 mx-1"></span>
 
                   {/* <!-- Notifications --> */}
                   <NotificationDropdown />
 
                   {/* <!-- Divider behind Notifications --> */}
-                  <span className="hidden xl:block w-px h-7.5 bg-gray-4 mx-2"></span>
+                  <span className="hidden xl:block w-px h-7.5 bg-gray-4 mx-1"></span>
 
                   <button
                     onClick={handleOpenCartModal}
@@ -461,7 +461,7 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
                           fill="currentColor"
                         />
                       </svg>
-                      <span suppressHydrationWarning className="flex items-center justify-center font-bold text-xs absolute -right-1.5 -top-1.5 bg-blue w-5.5 h-5.5 rounded-full text-white ring-2 ring-white shadow-sm">
+                      <span suppressHydrationWarning className="flex items-center justify-center font-bold text-xs absolute -right-0.5 -top-0.5 bg-blue w-5 h-5 rounded-full text-white ring-2 ring-white shadow-sm">
                         {mounted ? totalQuantity : 0}
                       </span>
                     </div>
