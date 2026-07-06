@@ -106,7 +106,7 @@ const Signup = () => {
   const handleResendEmail = async () => {
     if (!formData.email) return;
     setResending(true);
-    
+
     try {
       const response = await fetch("/api/auth/resend", {
         method: "POST",
@@ -134,23 +134,25 @@ const Signup = () => {
       <section className="overflow-hidden mt-0 pt-[10px] pb-10 lg:py-20 bg-white">
         <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-8 xl:px-6 2xl:px-0">
           <div className="max-w-[570px] w-full mx-auto rounded-xl bg-white shadow-1 p-4 sm:p-7.5 xl:p-11">
-            <div className="text-center mb-11">
-              <h2 className="font-semibold text-xl sm:text-2xl xl:text-heading-5 text-dark mb-1.5 flex items-center justify-center gap-3">
-                <span className="flex items-center justify-center w-12 h-12 rounded-full bg-blue/10 text-blue shrink-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                    <circle cx="9" cy="7" r="4"/>
-                    <line x1="19" y1="8" x2="19" y2="14"/>
-                    <line x1="22" y1="11" x2="16" y2="11"/>
-                  </svg>
-                </span>
-                Daftar Sekarang
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue/10 text-blue mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <line x1="19" y1="8" x2="19" y2="14" />
+                  <line x1="22" y1="11" x2="16" y2="11" />
+                </svg>
+              </div>
+              <h2 className="font-bold text-2xl sm:text-3xl text-dark mb-2 tracking-tight">
+                Buat Akun Baru
               </h2>
-              <p>Silakan lengkapi data Anda untuk mulai berbelanja.</p>
+              <p className="text-dark-4 text-base sm:text-lg">
+                Silakan lengkapi data Anda untuk mulai berbelanja.
+              </p>
             </div>
 
             <div className="flex flex-col gap-4.5">
-              <button 
+              <button
                 onClick={() => signInWithOAuth('google')}
                 className="flex justify-center items-center gap-3.5 rounded-lg border border-gray-3 bg-gray-1 p-3 ease-out duration-200 hover:bg-gray-2 w-full font-medium text-dark"
               >
@@ -349,11 +351,11 @@ const Signup = () => {
                   className="w-full flex items-center justify-center gap-2 font-medium text-white bg-blue py-3 px-6 rounded-lg ease-out duration-200 hover:bg-blue-dark mt-7.5 disabled:opacity-50"
                 >
                   {loading && <Spinner className="h-5 w-5 border-white border-t-transparent border-r-transparent border-l-transparent" />}
-                  {loading ? "Sedang mendaftarkan..." : "Daftar Kemitraan"}
+                  {loading ? "Sedang mendaftar..." : "Daftar Sekarang"}
                 </button>
 
                 <p className="text-center mt-6">
-                  Sudah punya akun mitra?
+                  Sudah punya akun ?
                   <Link
                     href="/signin"
                     className="text-dark ease-out duration-200 hover:text-blue pl-2"
@@ -372,24 +374,24 @@ const Signup = () => {
         <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-dark/60 backdrop-blur-sm">
           <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-8 text-center animate-fade-in-up">
             <div className="w-20 h-20 bg-blue/10 text-blue rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg 
-                className="w-10 h-10" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24" 
+              <svg
+                className="w-10 h-10"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                 />
               </svg>
             </div>
             <h3 className="text-2xl font-bold text-dark mb-2">Verifikasi Email Anda</h3>
             <p className="text-dark-4 mb-8">
-              Terima kasih telah mendaftar! Kami telah mengirimkan tautan verifikasi ke <span className="font-semibold text-dark">{formData.email}</span>. 
+              Terima kasih telah mendaftar! Kami telah mengirimkan tautan verifikasi ke <span className="font-semibold text-dark">{formData.email}</span>.
               Silakan periksa kotak masuk (atau folder spam) Anda dan klik tautan tersebut untuk mengaktifkan akun Anda.
             </p>
             <button

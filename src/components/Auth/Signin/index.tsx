@@ -107,18 +107,20 @@ const Signin = () => {
       <section className="overflow-hidden mt-0 pt-[10px] pb-10 lg:py-20 bg-white">
         <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-8 xl:px-6 2xl:px-0">
           <div className="max-w-[570px] w-full mx-auto rounded-xl bg-white shadow-1 p-4 sm:p-7.5 xl:p-11">
-            <div className="text-center mb-11">
-              <h2 className="font-semibold text-xl sm:text-2xl xl:text-heading-5 text-dark mb-1.5 flex items-center justify-center gap-3">
-                <span className="flex items-center justify-center w-12 h-12 rounded-full bg-blue/10 text-blue shrink-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                    <polyline points="10 17 15 12 10 7"/>
-                    <line x1="15" y1="12" x2="3" y2="12"/>
-                  </svg>
-                </span>
-                Masuk
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue/10 text-blue mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                  <polyline points="10 17 15 12 10 7"/>
+                  <line x1="15" y1="12" x2="3" y2="12"/>
+                </svg>
+              </div>
+              <h2 className="font-bold text-2xl sm:text-3xl text-dark mb-2 tracking-tight">
+                Selamat Datang!
               </h2>
-              <p>Gunakan nomor WhatsApp dan kata sandi Anda</p>
+              <p className="text-dark-4 text-base sm:text-lg">
+                Gunakan nomor WhatsApp dan kata sandi Anda
+              </p>
             </div>
 
             <div>
@@ -244,7 +246,7 @@ const Signin = () => {
                     href="/signup"
                     className="text-dark ease-out duration-200 hover:text-blue pl-2"
                   >
-                    Daftar Sekarang!
+                    Daftar Sekarang
                   </Link>
                 </p>
               </form>
