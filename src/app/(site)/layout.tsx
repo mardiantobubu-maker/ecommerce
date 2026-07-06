@@ -72,14 +72,14 @@ export default async function RootLayout({
     .order('name', { ascending: true });
 
   return (
-    <html lang="id" translate="no" suppressHydrationWarning={true} className={`${euclid.variable} overscroll-y-none`}>
+    <html lang="id" translate="no" suppressHydrationWarning={true} className={`${euclid.variable} overscroll-y-none overflow-x-hidden`}>
       <head>
         <link rel="preconnect" href="https://nrunbiazgozefdxixxib.supabase.co" />
         <link rel="dns-prefetch" href="https://nrunbiazgozefdxixxib.supabase.co" />
 
       </head>
 
-      <body suppressHydrationWarning={true} className="font-euclid-circular-a overscroll-y-none">
+      <body suppressHydrationWarning={true} className="font-euclid-circular-a overscroll-y-none overflow-x-hidden w-full relative">
         <ClientLayoutWrapper initialCategories={categories || []}>{children}</ClientLayoutWrapper>
         <SpeedInsights />
       </body>

@@ -232,7 +232,7 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
     >
 
 
-      <div className="w-full border-b border-gray-3" style={{ overflowX: 'clip' }}>
+      <div className="w-full border-b border-gray-3">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-7.5 xl:px-6 2xl:px-0 relative z-[60]">
           {/* <!-- header top start --> */}
           <div
