@@ -4,7 +4,16 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+      if (response) {
+        return response;
+      }
+      return fetch(event.request).catch(error => {
+        if (event.request.mode === 'navigate') {
+          console.error('Fetch failed; returning offline page instead.', error);
+          return caches.match('/offline.html'); // Fallback to a cached asset
+        }
+        throw error;
+      });
     })
   );
 });

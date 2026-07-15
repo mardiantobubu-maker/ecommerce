@@ -101,7 +101,7 @@ const ShopWithSidebar = ({ initialProducts }: { initialProducts?: any[] }) => {
     };
 
     const fetchProductsSafe = async () => {
-      setLoading(true);
+      if (products.length === 0) setLoading(true);
       const { data } = await supabase
         .from('products')
         .select('*')

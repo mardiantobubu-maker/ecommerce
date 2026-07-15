@@ -1,7 +1,7 @@
 import ImageWithSkeleton from "@/components/Common/ImageWithSkeleton";
 import Link from "next/link";
 
-const HeroCarousel = ({ banners = [] }: { banners?: any[] }) => {
+const HeroCarousel = ({ banners = [], priority = true }: { banners?: any[], priority?: boolean }) => {
   const activeBanner = banners.length > 0 ? banners[0] : null;
 
   if (!activeBanner) {
@@ -49,7 +49,7 @@ const HeroCarousel = ({ banners = [] }: { banners?: any[] }) => {
                 src="/images/hero/seragam-sekolah-kualitas-terbaik.png"
                 alt="seragam sekolah kualitas terbaik"
                 fill
-                priority
+                priority={priority}
                 loading="eager"
                 fetchPriority="high"
                 sizes="(max-width: 640px) 250px, (max-width: 1024px) 400px, 480px"
@@ -115,7 +115,7 @@ const HeroCarousel = ({ banners = [] }: { banners?: any[] }) => {
                 src={activeBanner.image_url}
                 alt={activeBanner.title}
                 fill
-                priority
+                priority={priority}
                 loading="eager"
                 fetchPriority="high"
                 sizes="(max-width: 640px) 250px, (max-width: 1024px) 400px, 480px"
