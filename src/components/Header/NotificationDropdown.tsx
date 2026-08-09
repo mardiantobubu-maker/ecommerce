@@ -23,6 +23,7 @@ const NotificationDropdown = () => {
   const [shouldWiggle, setShouldWiggle] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const suppressPollRef = useRef(false); // block poll setelah mark all read
 
   // Initialize audio on mount
   useEffect(() => {
@@ -244,7 +245,7 @@ const NotificationDropdown = () => {
     setupSubscriptions();
 
     const pollInterval = setInterval(() => {
-      if (isMounted) fetchNotifications();
+      if (isMounted && !suppressPollRef.current) fetchNotifications();
     }, 10000);
 
     return () => {
@@ -271,24 +272,24 @@ const NotificationDropdown = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    // Simpan state sebelumnya untuk rollback jika gagal
-    const previousNotifications = notifications;
-
     // Optimistic update langsung agar UI responsif
     setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
 
-    // Update semua notifikasi user (tanpa filter is_read agar tidak gagal pada nilai null)
+    // Block poll selama 5 detik agar tidak overwrite optimistic state
+    suppressPollRef.current = true;
+    setTimeout(() => { suppressPollRef.current = false; }, 5000);
+
+    // Update semua notifikasi user di DB
     const { error } = await supabase
       .from('notifications')
       .update({ is_read: true })
       .eq('user_id', user.id);
 
     if (error) {
-      // Rollback ke state sebelumnya jika gagal
-      setNotifications(previousNotifications);
       toast.error("Gagal menandai semua dibaca", { id: 'mark-all-read' });
+      // Fetch ulang dari DB untuk mendapatkan state yang akurat
+      setTimeout(() => fetchNotifications(), 1000);
     } else {
-      // Sukses: tampilkan toast tanpa fetch ulang (optimistic state sudah benar)
       toast.success("Semua notifikasi ditandai dibaca", { id: 'mark-all-read' });
     }
   };
