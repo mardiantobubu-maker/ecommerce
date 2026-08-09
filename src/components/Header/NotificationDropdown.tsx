@@ -271,14 +271,22 @@ const NotificationDropdown = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
+    // Optimistic update dulu agar UI langsung berubah
+    setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+
     const { error } = await supabase
       .from('notifications')
       .update({ is_read: true })
       .eq('user_id', user.id)
       .eq('is_read', false);
 
-    if (!error) {
-      setNotifications(notifications.map(n => ({ ...n, isRead: true })));
+    if (error) {
+      // Jika gagal, rollback dan fetch ulang dari DB
+      fetchNotifications();
+    } else {
+      // Sukses: fetch ulang dari DB untuk konfirmasi
+      await fetchNotifications();
+      toast.success("Semua notifikasi ditandai dibaca", { id: 'mark-all-read' });
     }
   };
 
@@ -483,11 +491,11 @@ const NotificationDropdown = () => {
               {/* Footer */}
               <div className="border-t border-gray-2 bg-gray-1/30 px-5 py-4 lg:py-3 shrink-0">
                 <Link 
-                  href="/my-account?tab=notifications" 
+                  href="/transactions" 
                   className="block text-center text-sm lg:text-xs font-bold text-dark-4 hover:text-blue transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
-                  Lihat Semua Notifikasi
+                  Lihat Semua Pesanan
                 </Link>
               </div>
             </div>
