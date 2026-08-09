@@ -124,10 +124,10 @@ const MyAccountContent = () => {
     initialized.current = true;
 
     let isMounted = true;
-    
+
     const initializeAccount = async () => {
       await fetchUser();
-      
+
       const { data: { user } } = await supabase.auth.getUser();
       if (!user || !isMounted) return;
 
@@ -241,18 +241,24 @@ const MyAccountContent = () => {
     });
 
     // Sync to public.profiles table for Admin visibility
+    // Kolom avatar_url & store_photo_url ditambahkan via supabase_fix_photo_upload.sql
     if (!error) {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        await supabase.from('profiles').upsert({
-          id: user.id,
-          full_name: profile.name,
-          company_name: profile.companyName,
-          business_type: profile.businessType,
-          whatsapp: profile.whatsapp,
-          store_photo_url: finalStorePhotoUrl,
-          photo: finalAvatarUrl
-        }, { onConflict: 'id' });
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          await supabase.from('profiles').upsert({
+            id: user.id,
+            full_name: profile.name,
+            company_name: profile.companyName,
+            business_type: profile.businessType,
+            whatsapp: profile.whatsapp,
+            ...(finalStorePhotoUrl && { store_photo_url: finalStorePhotoUrl }),
+            ...(finalAvatarUrl && { avatar_url: finalAvatarUrl }),
+          }, { onConflict: 'id' });
+        }
+      } catch (profileSyncErr) {
+        // Jangan block save utama jika sync profiles gagal
+        console.warn('profiles sync warning:', profileSyncErr);
       }
     }
 
@@ -309,14 +315,14 @@ const MyAccountContent = () => {
         .eq('user_id', user.id);
 
       if (resetError) throw resetError;
-      
+
       // 2. Set the SPECIFIC one as default
       const { error: setError } = await supabase
         .from('addresses')
         .update({ is_default: true })
         .eq('id', id)
         .eq('user_id', user.id); // Guard with user_id
-      
+
       if (setError) throw setError;
 
       toast.success("Alamat utama berhasil diperbarui");
@@ -411,16 +417,16 @@ const MyAccountContent = () => {
                   <p className="text-dark-4 mb-8 text-left leading-relaxed">
                     Dari dasbor akun Anda, Anda dapat dengan mudah memeriksa & melihat pesanan terbaru Anda, mengelola alamat pengiriman, dan mengedit detail akun Anda.
                   </p>
-                  
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {[
                       { id: "account-details", label: "Detail Akun", desc: "Update profil Anda", icon: <><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></> },
                       { id: "orders", label: "Pesanan Terbaru", desc: "Cek status pengiriman", icon: <><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 0 1-8 0" /></>, hiddenMobile: true, isExternal: true, href: "/transactions" },
                       { id: "addresses", label: "Alamat Pengiriman", desc: "Kelola lokasi antar", icon: <><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></> },
                     ].map(card => (
-                      <button 
-                        key={card.id} 
-                        onClick={() => card.isExternal ? router.push(card.href) : handleTabChange(card.id)} 
+                      <button
+                        key={card.id}
+                        onClick={() => card.isExternal ? router.push(card.href) : handleTabChange(card.id)}
                         className={`p-6 border border-gray-3 rounded-xl hover:border-blue hover:bg-blue/[0.02] transition-all text-left group bg-white shadow-sm ${card.hiddenMobile ? 'hidden sm:block' : ''}`}
                       >
                         <div className="w-12 h-12 rounded-lg bg-blue/5 flex items-center justify-center text-blue mb-4 group-hover:bg-blue group-hover:text-white transition-all">
@@ -443,14 +449,13 @@ const MyAccountContent = () => {
                   </div>
                   <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {addresses.map((addr) => (
-                      <div 
-                        key={addr.id} 
+                      <div
+                        key={addr.id}
                         onClick={() => handleSetDefaultAddress(addr.id)}
-                        className={`p-5 border rounded-xl relative text-left transition-all cursor-pointer group/card ${
-                          addr.is_default 
-                            ? "border-blue bg-blue/[0.03] ring-1 ring-blue/20" 
+                        className={`p-5 border rounded-xl relative text-left transition-all cursor-pointer group/card ${addr.is_default
+                            ? "border-blue bg-blue/[0.03] ring-1 ring-blue/20"
                             : "border-gray-3 bg-white hover:border-blue/40 hover:bg-gray-1/30"
-                        }`}
+                          }`}
                       >
                         <div className="absolute top-4 right-4">
                           {addr.is_default ? (
@@ -503,11 +508,11 @@ const MyAccountContent = () => {
                             </svg>
                             Edit
                           </button>
-                          <button 
+                          <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleDeleteAddress(addr.id);
-                            }} 
+                            }}
                             className="text-red text-xs font-bold hover:underline flex items-center gap-1.5"
                           >
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -520,7 +525,7 @@ const MyAccountContent = () => {
                     ))}
 
                     {/* Tambah Alamat Button at Bottom */}
-                    <button 
+                    <button
                       onClick={openAddressModal}
                       className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-3 rounded-xl hover:border-blue hover:bg-blue/[0.02] transition-all group min-h-[160px]"
                     >
