@@ -271,21 +271,24 @@ const NotificationDropdown = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    // Optimistic update dulu agar UI langsung berubah
+    // Simpan state sebelumnya untuk rollback jika gagal
+    const previousNotifications = notifications;
+
+    // Optimistic update langsung agar UI responsif
     setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
 
+    // Update semua notifikasi user (tanpa filter is_read agar tidak gagal pada nilai null)
     const { error } = await supabase
       .from('notifications')
       .update({ is_read: true })
-      .eq('user_id', user.id)
-      .eq('is_read', false);
+      .eq('user_id', user.id);
 
     if (error) {
-      // Jika gagal, rollback dan fetch ulang dari DB
-      fetchNotifications();
+      // Rollback ke state sebelumnya jika gagal
+      setNotifications(previousNotifications);
+      toast.error("Gagal menandai semua dibaca", { id: 'mark-all-read' });
     } else {
-      // Sukses: fetch ulang dari DB untuk konfirmasi
-      await fetchNotifications();
+      // Sukses: tampilkan toast tanpa fetch ulang (optimistic state sudah benar)
       toast.success("Semua notifikasi ditandai dibaca", { id: 'mark-all-read' });
     }
   };
@@ -367,7 +370,7 @@ const NotificationDropdown = () => {
       {isOpen && (
         <>
           {/* Mobile Overlay & Full Page Menu */}
-          <div className="fixed inset-0 z-[9999] lg:absolute lg:inset-auto lg:right-0 lg:mt-3 lg:w-[360px] lg:max-w-[calc(100vw-32px)]">
+          <div className="fixed inset-0 z-[9999] overflow-hidden lg:absolute lg:inset-auto lg:right-0 lg:mt-3 lg:w-[360px] lg:max-w-[calc(100vw-32px)]">
             {/* Backdrop for mobile */}
             <div 
               className="fixed inset-0 bg-dark/60 lg:hidden"
@@ -375,7 +378,7 @@ const NotificationDropdown = () => {
             ></div>
 
             {/* Notification Panel */}
-            <div className="relative h-full w-full bg-white flex flex-col lg:h-auto lg:rounded-2xl lg:shadow-2xl lg:border lg:border-gray-2 animate-in slide-in-from-right-10 lg:animate-in lg:fade-in lg:zoom-in duration-300">
+            <div className="relative h-full w-full bg-white flex flex-col overflow-x-hidden lg:h-auto lg:rounded-2xl lg:shadow-2xl lg:border lg:border-gray-2 animate-in slide-in-from-right-10 lg:animate-in lg:fade-in lg:zoom-in duration-300">
               {/* Header */}
               <div className="flex items-center justify-between border-b border-gray-2 px-5 py-4 shrink-0">
                 <div className="flex items-center gap-3">
@@ -422,7 +425,7 @@ const NotificationDropdown = () => {
               </div>
 
               {/* List */}
-              <div className="flex-1 overflow-y-auto no-scrollbar pb-10 lg:max-h-[400px] lg:pb-3">
+              <div className="flex-1 overflow-y-auto overflow-x-hidden no-scrollbar pb-10 lg:max-h-[400px] lg:pb-3">
                 {filteredNotifications.length > 0 ? (
                   filteredNotifications.map((item) => (
                     <div
@@ -492,7 +495,7 @@ const NotificationDropdown = () => {
                       </Link>
 
                       {/* Kolom kanan: icon hapus (atas) + badge status (bawah) */}
-                      <div className="flex flex-col items-center justify-between py-4 pr-3 pl-1 flex-shrink-0 gap-2">
+                      <div className="flex flex-col items-center justify-between py-4 pr-3 pl-1 flex-shrink-0 gap-2 max-w-[90px]">
                         {/* Tombol Hapus - selalu terlihat, posisi atas */}
                         <button
                           onClick={(e) => {
@@ -512,7 +515,7 @@ const NotificationDropdown = () => {
                         </button>
                         {/* Badge status - posisi bawah */}
                         {item.status ? (
-                          <span className="rounded-full bg-blue/10 px-2 py-0.5 text-[10px] font-bold text-blue whitespace-nowrap">
+                          <span className="rounded-full bg-blue/10 px-2 py-0.5 text-[10px] font-bold text-blue text-center break-words max-w-full leading-tight">
                             {item.status}
                           </span>
                         ) : (
