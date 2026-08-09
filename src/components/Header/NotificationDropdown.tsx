@@ -454,8 +454,8 @@ const NotificationDropdown = () => {
                           </div>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-2">
-                            <p className={`text-base lg:text-sm font-bold truncate ${!item.isRead ? "text-dark" : "text-dark-4"}`}>
+                          <div className="flex items-center gap-2 pr-1">
+                            <p className={`text-base lg:text-sm font-bold truncate flex-1 ${!item.isRead ? "text-dark" : "text-dark-4"}`}>
                               {item.title}
                             </p>
                             {!item.isRead && <span className="h-2 w-2 flex-shrink-0 rounded-full bg-blue"></span>}
@@ -483,36 +483,42 @@ const NotificationDropdown = () => {
                               item.message
                             )}
                           </p>
-                          <div className="mt-2 flex items-center justify-between">
+                          <div className="mt-2 flex items-center">
                             <span className="text-xs lg:text-[10px] font-medium text-dark-5">
                               {item.time}
                             </span>
-                            {item.status && (
-                              <span className="rounded-full bg-blue/10 px-2 py-0.5 text-[10px] font-bold text-blue">
-                                {item.status}
-                              </span>
-                            )}
                           </div>
                         </div>
                       </Link>
 
-                      {/* Delete Button */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          deleteNotification(item.id);
-                        }}
-                        title="Hapus notifikasi"
-                        className="flex-shrink-0 flex items-center justify-center w-10 opacity-0 group-hover:opacity-100 transition-all duration-200 text-dark-5 hover:text-red hover:bg-red/5 border-l border-gray-2/50"
-                      >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M3 6h18"/>
-                          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
-                          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                          <line x1="10" y1="11" x2="10" y2="17"/>
-                          <line x1="14" y1="11" x2="14" y2="17"/>
-                        </svg>
-                      </button>
+                      {/* Kolom kanan: icon hapus (atas) + badge status (bawah) */}
+                      <div className="flex flex-col items-center justify-between py-4 pr-3 pl-1 flex-shrink-0 gap-2">
+                        {/* Tombol Hapus - selalu terlihat, posisi atas */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deleteNotification(item.id);
+                          }}
+                          title="Hapus notifikasi"
+                          className="flex items-center justify-center w-7 h-7 rounded-full text-dark-5 hover:text-red hover:bg-red/10 transition-all duration-200"
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M3 6h18"/>
+                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                            <line x1="10" y1="11" x2="10" y2="17"/>
+                            <line x1="14" y1="11" x2="14" y2="17"/>
+                          </svg>
+                        </button>
+                        {/* Badge status - posisi bawah */}
+                        {item.status ? (
+                          <span className="rounded-full bg-blue/10 px-2 py-0.5 text-[10px] font-bold text-blue whitespace-nowrap">
+                            {item.status}
+                          </span>
+                        ) : (
+                          <span className="w-7 h-5" /> 
+                        )}
+                      </div>
                     </div>
                   ))
                 ) : (
