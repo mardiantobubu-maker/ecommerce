@@ -111,143 +111,146 @@ const ShopDetails = () => {
 
   useEffect(() => {
     let isMounted = true;
+    let channel: any = null;
 
-    const fetchReviewsSafe = async () => {
-      if (!initialProduct?.id) return;
-      
-      const { data } = await supabase
-        .from('testimonials')
-        .select('*')
-        .eq('product_id', initialProduct.id)
-        .order('created_at', { ascending: false });
-
-      if (!isMounted) return;
-
-      if (data && data.length > 0) {
-        const uniqueReviews = data.filter((item: any, index: number, arr: any[]) => {
-          return arr.findIndex((other: any) =>
-            other.name === item.name &&
-            other.comment === item.comment &&
-            other.rating === item.rating
-          ) === index;
-        });
-
-        const formattedReviews = uniqueReviews.map((item: any) => ({
-          id: item.id,
-          name: item.name,
-          role: item.role,
-          image: item.image_url || "/images/users/user-01.jpg",
-          rating: item.rating,
-          comment: item.comment
-        }));
+    const setupReviewsAndChannel = (resolvedProductId: any) => {
+      const fetchReviewsSafe = async () => {
+        if (!resolvedProductId) return;
         
-        if (isMounted) {
-          setReviews(formattedReviews);
+        const { data } = await supabase
+          .from('testimonials')
+          .select('*')
+          .eq('product_id', resolvedProductId)
+          .order('created_at', { ascending: false });
+
+        if (!isMounted) return;
+
+        if (data && data.length > 0) {
+          const uniqueReviews = data.filter((item: any, index: number, arr: any[]) => {
+            return arr.findIndex((other: any) =>
+              other.name === item.name &&
+              other.comment === item.comment &&
+              other.rating === item.rating
+            ) === index;
+          });
+
+          const formattedReviews = uniqueReviews.map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            role: item.role,
+            image: item.image_url || "/images/users/user-01.jpg",
+            rating: item.rating,
+            comment: item.comment
+          }));
           
-          const derivedReviewsCount = formattedReviews.length;
-          const derivedRating = derivedReviewsCount > 0
-            ? Number((formattedReviews.reduce((sum, rev) => sum + Number(rev.rating || 0), 0) / derivedReviewsCount).toFixed(1))
-            : 0;
+          if (isMounted) {
+            setReviews(formattedReviews);
+            
+            const derivedReviewsCount = formattedReviews.length;
+            const derivedRating = derivedReviewsCount > 0
+              ? Number((formattedReviews.reduce((sum, rev) => sum + Number(rev.rating || 0), 0) / derivedReviewsCount).toFixed(1))
+              : 0;
 
-          setProduct((prev: any) =>
-            prev?.id ? { ...prev, reviews: derivedReviewsCount, rating: derivedRating } : prev
-          );
+            setProduct((prev: any) =>
+              prev?.id ? { ...prev, reviews: derivedReviewsCount, rating: derivedRating } : prev
+            );
+          }
+          return;
         }
-        return;
-      }
 
-      if (hasSeededDummyReview.current) {
-        if (isMounted) setReviews(initialReviews);
-        return;
-      }
-      hasSeededDummyReview.current = true;
+        if (hasSeededDummyReview.current) {
+          if (isMounted) setReviews(initialReviews);
+          return;
+        }
+        hasSeededDummyReview.current = true;
 
-      // Seed dummy review...
-      const dummyPayload = {
-        product_id: initialProduct.id,
-        name: "Ibu Siti",
-        role: "Orang Tua Murid",
-        comment: "Kualitas seragamnya sangat bagus, anak saya sangat nyaman memakainya ke sekolah. Terima kasih Toko Seragam!",
-        rating: 5,
-        image_url: "/images/users/user-01.jpg"
+        // Seed dummy review...
+        const dummyPayload = {
+          product_id: resolvedProductId,
+          name: "Ibu Siti",
+          role: "Orang Tua Murid",
+          comment: "Kualitas seragamnya sangat bagus, anak saya sangat nyaman memakainya ke sekolah. Terima kasih Toko Seragam!",
+          rating: 5,
+          image_url: "/images/users/user-01.jpg"
+        };
+
+        const { data: existingDummy } = await supabase
+          .from('testimonials')
+          .select('id,name,role,comment,rating,image_url')
+          .eq('product_id', resolvedProductId)
+          .eq('name', dummyPayload.name)
+          .eq('comment', dummyPayload.comment)
+          .eq('rating', dummyPayload.rating)
+          .limit(1);
+
+        if (!isMounted) return;
+
+        if (existingDummy && existingDummy.length > 0) {
+          const dummy = existingDummy[0];
+          setReviews([{
+            id: dummy.id,
+            name: dummy.name,
+            role: dummy.role,
+            image: dummy.image_url || "/images/users/user-01.jpg",
+            rating: dummy.rating,
+            comment: dummy.comment
+          }]);
+          return;
+        }
+
+        const { data: seededData } = await supabase.from('testimonials').insert([dummyPayload]).select('*');
+        if (!isMounted) return;
+
+        if (seededData && seededData.length > 0) {
+          const seeded = seededData[0];
+          setReviews([{
+            id: seeded.id,
+            name: seeded.name,
+            role: seeded.role,
+            image: seeded.image_url || "/images/users/user-01.jpg",
+            rating: seeded.rating,
+            comment: seeded.comment
+          }]);
+        } else {
+          setReviews(initialReviews);
+        }
       };
 
-      const { data: existingDummy } = await supabase
-        .from('testimonials')
-        .select('id,name,role,comment,rating,image_url')
-        .eq('product_id', initialProduct.id)
-        .eq('name', dummyPayload.name)
-        .eq('comment', dummyPayload.comment)
-        .eq('rating', dummyPayload.rating)
-        .limit(1);
+      fetchReviewsSafe();
 
-      if (!isMounted) return;
+      // Set up Realtime subscription
+      channel = supabase
+        .channel(`testimonials-realtime-v2-${resolvedProductId}`)
+        .on(
+          'postgres_changes',
+          { event: 'INSERT', schema: 'public', table: 'testimonials' },
+          (payload: any) => {
+            if (!isMounted) return;
+            const newItem = payload.new;
+            if (newItem.product_id !== resolvedProductId) return;
 
-      if (existingDummy && existingDummy.length > 0) {
-        const dummy = existingDummy[0];
-        setReviews([{
-          id: dummy.id,
-          name: dummy.name,
-          role: dummy.role,
-          image: dummy.image_url || "/images/users/user-01.jpg",
-          rating: dummy.rating,
-          comment: dummy.comment
-        }]);
-        return;
-      }
-
-      const { data: seededData } = await supabase.from('testimonials').insert([dummyPayload]).select('*');
-      if (!isMounted) return;
-
-      if (seededData && seededData.length > 0) {
-        const seeded = seededData[0];
-        setReviews([{
-          id: seeded.id,
-          name: seeded.name,
-          role: seeded.role,
-          image: seeded.image_url || "/images/users/user-01.jpg",
-          rating: seeded.rating,
-          comment: seeded.comment
-        }]);
-      } else {
-        setReviews(initialReviews);
-      }
+            const formattedReview = {
+              id: newItem.id,
+              name: newItem.name,
+              role: newItem.role || "Pembeli Terverifikasi",
+              image: newItem.image_url || "/images/users/user-01.jpg",
+              rating: newItem.rating,
+              comment: newItem.comment
+            };
+            
+            setReviews(prev => {
+              if (prev.some(r => r.id === formattedReview.id)) return prev;
+              return [formattedReview, ...prev];
+            });
+            
+            syncProductReviewSummary();
+          }
+        )
+        .subscribe();
     };
 
-    fetchReviewsSafe();
-
-    // Set up Realtime subscription (filter by product_id on the client side since realtime filters need exact match config on server)
-    const channel = supabase
-      .channel(`testimonials-realtime-v2-${initialProduct?.id || 'new'}`)
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'testimonials' },
-        (payload: any) => {
-          if (!isMounted) return;
-          const newItem = payload.new;
-          if (newItem.product_id !== initialProduct?.id) return; // Only process reviews for this product
-
-          const formattedReview = {
-            id: newItem.id,
-            name: newItem.name,
-            role: newItem.role || "Pembeli Terverifikasi",
-            image: newItem.image_url || "/images/users/user-01.jpg",
-            rating: newItem.rating,
-            comment: newItem.comment
-          };
-          
-          setReviews(prev => {
-            if (prev.some(r => r.id === formattedReview.id)) return prev;
-            return [formattedReview, ...prev];
-          });
-          
-          syncProductReviewSummary();
-        }
-      )
-      .subscribe();
-
     const fetchLatestProductSafe = async () => {
-      let initialProduct = productFromRedux;
+      let resolvedProduct = productFromRedux;
 
       if (productIdFromUrl) {
         const normalizedId = Number(productIdFromUrl);
@@ -262,7 +265,7 @@ const ShopDetails = () => {
         if (!isMounted) return;
 
         if (directProduct) {
-          initialProduct = directProduct;
+          resolvedProduct = directProduct;
         } else {
           localStorage.removeItem("productDetails");
           setProduct({ title: "NOT_FOUND" });
@@ -272,13 +275,13 @@ const ShopDetails = () => {
 
       if (!isMounted) return;
 
-      if (!initialProduct || !initialProduct.id) {
+      if (!resolvedProduct || !resolvedProduct.id) {
         if (!productIdFromUrl) {
-          initialProduct = productFromRedux && productFromRedux.title ? productFromRedux : getStoredProduct();
+          resolvedProduct = productFromRedux && productFromRedux.title ? productFromRedux : getStoredProduct();
         }
       }
 
-      if (!initialProduct || !initialProduct.id) {
+      if (!resolvedProduct || !resolvedProduct.id) {
         if (!productIdFromUrl) {
           router.replace("/shop-with-sidebar");
           return;
@@ -287,7 +290,10 @@ const ShopDetails = () => {
         return;
       }
 
-      const { data: updatedProduct, error } = await supabase.from('products').select('*').eq('id', initialProduct.id).maybeSingle();
+      // We have the product now, setup reviews
+      setupReviewsAndChannel(resolvedProduct.id);
+
+      const { data: updatedProduct, error } = await supabase.from('products').select('*').eq('id', resolvedProduct.id).maybeSingle();
       if (!isMounted) return;
 
       if (updatedProduct && !error) {
@@ -331,7 +337,7 @@ const ShopDetails = () => {
 
     return () => {
       isMounted = false;
-      supabase.removeChannel(channel);
+      if (channel) supabase.removeChannel(channel);
     };
   }, [productIdFromUrl, productFromRedux, router]);
 
