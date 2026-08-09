@@ -193,13 +193,16 @@ const SingleListItem = ({ item, priority = false }: { item: Product; priority?: 
 
           <div className="flex items-center gap-1.5 mb-2">
             <div className="flex items-center gap-0.5">
-              {[...Array(5)].map((_, i) => (
-                <span key={i} className={`text-[12px] ${i < 4 ? "text-orange" : "text-gray-300"}`}>
-                  ★
-                </span>
-              ))}
+              {[...Array(5)].map((_, i) => {
+                const currentRating = item.reviews > 0 ? Math.round(item.rating || 0) : 0;
+                return (
+                  <span key={i} className={`text-[12px] ${i < currentRating ? "text-orange" : "text-gray-300"}`}>
+                    ★
+                  </span>
+                );
+              })}
             </div>
-            <p className="text-[12px] font-bold text-dark">4</p>
+            <p className="text-[12px] font-bold text-dark">{item.reviews > 0 ? (item.rating || 0) : 0}</p>
             <p className="text-[12px] text-gray-400">({item.reviews || 0})</p>
           </div>
         </div>

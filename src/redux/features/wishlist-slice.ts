@@ -10,6 +10,7 @@ type WishListItem = {
   price: number;
   discountedPrice: number;
   quantity: number;
+  stock?: number;
   status?: string;
   imgs?: {
     thumbnails: string[];
@@ -48,7 +49,7 @@ export const wishlist = createSlice({
   initialState,
   reducers: {
     addItemToWishlist: (state, action: PayloadAction<WishListItem>) => {
-      const { id, title, price, quantity, imgs, discountedPrice, status } =
+      const { id, title, price, quantity, imgs, discountedPrice, status, stock } =
         action.payload;
       const existingItem = state.items.find((item) => item.id === id);
 
@@ -63,6 +64,7 @@ export const wishlist = createSlice({
           imgs,
           discountedPrice,
           status,
+          stock,
         });
       }
       saveWishlistToStorage(state.items);

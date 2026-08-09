@@ -22,6 +22,9 @@ const QuickViewModal = () => {
   const [quantity, setQuantity] = useState(20);
   const [isReviewDropdownOpen, setIsReviewDropdownOpen] = useState(false);
   const [reviews, setReviews] = useState<any[]>([]);
+  const actualRating = reviews.length > 0 
+    ? Number((reviews.reduce((sum, rev) => sum + Number(rev.rating || 0), 0) / reviews.length).toFixed(1))
+    : 0;
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -222,37 +225,37 @@ const QuickViewModal = () => {
               </h3>
 
               <div className="flex flex-wrap items-center gap-5 mb-6">
-                  <div className="relative flex items-center gap-2">
-                    <div className="flex items-center gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <svg
-                          key={i}
-                          className={i < Math.floor(product.rating || 5) ? "fill-[#FFA645]" : "fill-gray-4"}
-                          width="18"
-                          height="18"
-                          viewBox="0 0 18 18"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
+                    <div className="relative flex items-center gap-2">
+                      <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <svg
+                            key={i}
+                            className={i < Math.round(actualRating) ? "fill-[#FFA645]" : "fill-gray-4"}
+                            width="18"
+                            height="18"
+                            viewBox="0 0 18 18"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M16.7906 6.72187L11.7 5.93438L9.39377 1.09688C9.22502 0.759375 8.77502 0.759375 8.60627 1.09688L6.30002 5.9625L1.23752 6.72187C0.871891 6.77812 0.731266 7.25625 1.01252 7.50938L4.69689 11.3063L3.82502 16.6219C3.76877 16.9875 4.13439 17.2969 4.47189 17.0719L9.05627 14.5687L13.6125 17.0719C13.9219 17.2406 14.3156 16.9594 14.2313 16.6219L13.3594 11.3063L17.0438 7.50938C17.2688 7.25625 17.1563 6.77812 16.7906 6.72187Z"
+                            />
+                          </svg>
+                        ))}
+                      </div>
+                      <span className="text-sm text-dark font-bold">
+                        Peringkat {actualRating}{" "}
+                        <button
+                          type="button"
+                          onClick={() => setIsReviewDropdownOpen((prev) => !prev)}
+                          className="font-normal opacity-60 hover:text-blue transition-colors focus:outline-none"
                         >
-                          <path
-                            d="M16.7906 6.72187L11.7 5.93438L9.39377 1.09688C9.22502 0.759375 8.77502 0.759375 8.60627 1.09688L6.30002 5.9625L1.23752 6.72187C0.871891 6.77812 0.731266 7.25625 1.01252 7.50938L4.69689 11.3063L3.82502 16.6219C3.76877 16.9875 4.13439 17.2969 4.47189 17.0719L9.05627 14.5687L13.6125 17.0719C13.9219 17.2406 14.3156 16.9594 14.2313 16.6219L13.3594 11.3063L17.0438 7.50938C17.2688 7.25625 17.1563 6.77812 16.7906 6.72187Z"
-                          />
-                        </svg>
-                      ))}
-                    </div>
-                    <span className="text-sm text-dark font-bold">
-                      Peringkat {product.rating || 5}{" "}
-                      <button
-                        type="button"
-                        onClick={() => setIsReviewDropdownOpen((prev) => !prev)}
-                        className="font-normal opacity-60 hover:text-blue transition-colors focus:outline-none"
-                      >
-                        ({reviews.length || 5} ulasan)
-                      </button>
-                    </span>
+                          ({reviews.length || 0} ulasan)
+                        </button>
+                      </span>
 
-                    {isReviewDropdownOpen && (
-                      <div className="absolute top-full left-0 mt-2 w-[320px] rounded-2xl border border-gray-3 bg-white p-4 shadow-2xl z-20 animate-fadeIn">
+                      {isReviewDropdownOpen && (
+                        <div className="absolute top-full left-0 mt-2 w-[320px] rounded-2xl border border-gray-3 bg-white p-4 shadow-2xl z-20 animate-fadeIn">
                         <div className="max-h-60 overflow-y-auto space-y-3 no-scrollbar">
                           {reviews.length > 0 ? (
                             reviews.slice(0, 5).map((rev) => (

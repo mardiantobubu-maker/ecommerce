@@ -92,30 +92,62 @@ const SingleItem = ({ item }) => {
       <div className="w-full lg:w-auto lg:min-w-[265px] flex items-center justify-between lg:block">
         <span className="lg:hidden text-dark font-medium">Status:</span>
         <div className="flex items-center gap-1.5">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 8V12M12 16H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-              stroke="#F23030"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-
-          <span className="text-red"> Stok Habis </span>
+          {item.stock !== 0 ? (
+            <>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                  fill="#219653"
+                  fillOpacity="0.1"
+                />
+                <path
+                  d="M8 12L11 15L16 9"
+                  stroke="#219653"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span className="text-[#219653]"> Tersedia </span>
+            </>
+          ) : (
+            <>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 8V12M12 16H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                  stroke="#F23030"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span className="text-red"> Stok Habis </span>
+            </>
+          )}
         </div>
       </div>
 
       <div className="w-full lg:w-auto lg:min-w-[150px] flex lg:justify-end mt-2 lg:mt-0">
         <button
           onClick={() => handleAddToCart()}
-          className="w-full lg:w-auto inline-flex items-center justify-center text-dark hover:text-white bg-gray-1 border border-gray-3 py-2.5 px-6 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
+          disabled={item.stock === 0}
+          className={`w-full lg:w-auto inline-flex items-center justify-center py-2.5 px-6 rounded-md ease-out duration-200 ${
+            item.stock === 0 
+            ? "text-dark-4 bg-gray-3 border-gray-3 cursor-not-allowed opacity-60"
+            : "text-dark hover:text-white bg-gray-1 border border-gray-3 hover:bg-blue hover:border-blue"
+          }`}
         >
           Tambah
         </button>
