@@ -1,10 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
-import Image from "next/image";
-import Link from "next/link";
 import AddressModal from "./AddressModal";
-import Orders from "../Orders";
 import { supabase } from "@/lib/supabase";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
@@ -22,6 +19,7 @@ const MyAccountContent = () => {
   const [editingAddress, setEditingAddress] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [mustCompleteProfile, setMustCompleteProfile] = useState(false);
+  const [photoError, setPhotoError] = useState(false);
 
   const [addresses, setAddresses] = useState<any[]>([]);
 
@@ -162,6 +160,7 @@ const MyAccountContent = () => {
     if (tempPhoto) URL.revokeObjectURL(tempPhoto);
     setTempPhotoFile(file);
     setTempPhoto(URL.createObjectURL(file));
+    setPhotoError(false); // Reset error state agar foto baru tampil
   };
 
   const handleStorePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -352,13 +351,13 @@ const MyAccountContent = () => {
             <div className="xl:max-w-[350px] w-full bg-white rounded-xl shadow-1 overflow-hidden h-fit">
               <div className="flex items-center gap-5 py-8 px-9 border-b border-gray-3">
                 <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-blue/20 bg-blue/5 flex items-center justify-center">
-                  {(tempPhoto || profile.photo) ? (
-                    <Image
+                  {(tempPhoto || profile.photo) && !photoError ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
                       src={tempPhoto || profile.photo}
                       alt="user"
-                      width={64}
-                      height={64}
                       className="w-full h-full object-cover"
+                      onError={() => setPhotoError(true)}
                     />
                   ) : (
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3C50E0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -556,13 +555,13 @@ const MyAccountContent = () => {
                   <form onSubmit={handleProfileSubmit} className="flex flex-col gap-6">
                     <div className="flex items-center gap-6 mb-4">
                       <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-gray-3 bg-blue/5 flex items-center justify-center">
-                        {(tempPhoto || profile.photo) ? (
+                        {(tempPhoto || profile.photo) && !photoError ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
                             src={tempPhoto || profile.photo}
                             alt="Profile photo"
                             className="w-full h-full object-cover"
-                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                            onError={() => setPhotoError(true)}
                           />
                         ) : (
                           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3C50E0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
