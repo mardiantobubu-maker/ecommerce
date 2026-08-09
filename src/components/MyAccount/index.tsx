@@ -24,7 +24,7 @@ const MyAccountContent = () => {
   const [mustCompleteProfile, setMustCompleteProfile] = useState(false);
 
   const [addresses, setAddresses] = useState<any[]>([]);
-  const [notifications, setNotifications] = useState<any[]>([]);
+
   const [profile, setProfile] = useState({
     name: "",
     email: "",
@@ -67,7 +67,7 @@ const MyAccountContent = () => {
         joinedDate: new Date(user.created_at).toLocaleDateString('id-ID', { month: 'short', year: 'numeric' })
       });
       fetchAddresses(user.id);
-      fetchNotifications(user.id);
+
 
       // Cek apakah data wajib kosong (terutama untuk login Google baru)
       if (!user.user_metadata?.company_name || !user.user_metadata?.whatsapp || !user.user_metadata?.store_photo_url) {
@@ -91,15 +91,7 @@ const MyAccountContent = () => {
     if (data) setAddresses(data);
   };
 
-  const fetchNotifications = async (userId: string) => {
-    const { data } = await supabase
-      .from('notifications')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
-
-    if (data) setNotifications(data);
-
+  const fetchAddressAutoSync = async (userId: string) => {
     // AUTO-SYNC: Jika daftar alamat kosong, coba ambil dari metadata user/profile
     const { data: existingAddrs } = await supabase.from('addresses').select('id').eq('user_id', userId).limit(1);
     if (!existingAddrs || existingAddrs.length === 0) {
@@ -141,34 +133,13 @@ const MyAccountContent = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user || !isMounted) return;
 
-      // Setup Realtime Subscription for Notifications
-      const channel = supabase
-        .channel("dashboard_notifications_realtime_v2")
-        .on(
-          'postgres_changes',
-          {
-            event: '*',
-            schema: 'public',
-            table: 'notifications',
-            filter: `user_id=eq.${user.id}`,
-          },
-          () => {
-            if (isMounted) fetchNotifications(user.id);
-          }
-        )
-        .subscribe();
-
-      return () => {
-        isMounted = false;
-        supabase.removeChannel(channel);
-      };
+      await fetchAddressAutoSync(user.id);
     };
 
-    const cleanup = initializeAccount();
+    initializeAccount();
 
     return () => {
       isMounted = false;
-      cleanup.then(unsub => unsub && unsub());
     };
   }, []);
 
@@ -177,18 +148,38 @@ const MyAccountContent = () => {
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setTempPhotoFile(file);
-      setTempPhoto(URL.createObjectURL(file)); // Hanya untuk preview
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Ukuran foto profil maksimal 5MB.");
+      e.target.value = "";
+      return;
     }
+    if (!file.type.startsWith("image/")) {
+      toast.error("File harus berupa gambar (JPG, PNG, dll).");
+      e.target.value = "";
+      return;
+    }
+    if (tempPhoto) URL.revokeObjectURL(tempPhoto);
+    setTempPhotoFile(file);
+    setTempPhoto(URL.createObjectURL(file));
   };
 
   const handleStorePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setTempStorePhotoFile(file);
-      setTempStorePhoto(URL.createObjectURL(file)); // Hanya untuk preview
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Ukuran foto toko maksimal 5MB.");
+      e.target.value = "";
+      return;
     }
+    if (!file.type.startsWith("image/")) {
+      toast.error("File harus berupa gambar (JPG, PNG, dll).");
+      e.target.value = "";
+      return;
+    }
+    if (tempStorePhoto) URL.revokeObjectURL(tempStorePhoto);
+    setTempStorePhotoFile(file);
+    setTempStorePhoto(URL.createObjectURL(file));
   };
 
   const handleProfileSubmit = async (e: React.FormEvent) => {
@@ -199,44 +190,42 @@ const MyAccountContent = () => {
 
     // 1. Upload Avatar (Profile Photo)
     if (tempPhotoFile) {
-      try {
-        const fileExt = tempPhotoFile.name.split('.').pop();
-        const { data: { user } } = await supabase.auth.getUser();
-        const fileName = `avatar-${user?.id}-${Date.now()}.${fileExt}`;
+      const fileExt = tempPhotoFile.name.split('.').pop();
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      const fileName = `avatar-${currentUser?.id}-${Date.now()}.${fileExt}`;
 
-        const { error: uploadError } = await supabase.storage
-          .from('avatar')
-          .upload(fileName, tempPhotoFile, { upsert: true });
+      const { error: uploadError } = await supabase.storage
+        .from('avatar')
+        .upload(fileName, tempPhotoFile, { upsert: true });
 
-        if (!uploadError) {
-          const { data } = supabase.storage.from('avatar').getPublicUrl(fileName);
-          finalAvatarUrl = data.publicUrl;
-        }
-      } catch (err: any) {
-        console.error("Avatar upload failed", err);
+      if (uploadError) {
+        toast.error(`Gagal upload foto profil: ${uploadError.message}`);
+        setLoading(false);
+        return;
       }
+      const { data: urlData } = supabase.storage.from('avatar').getPublicUrl(fileName);
+      finalAvatarUrl = urlData.publicUrl;
     }
 
     let finalStorePhotoUrl = profile.storePhoto;
 
     // 2. Upload Store Photo
     if (tempStorePhotoFile) {
-      try {
-        const fileExt = tempStorePhotoFile.name.split('.').pop();
-        const { data: { user } } = await supabase.auth.getUser();
-        const fileName = `store-${user?.id}-${Date.now()}.${fileExt}`;
+      const fileExt = tempStorePhotoFile.name.split('.').pop();
+      const { data: { user: currentUser2 } } = await supabase.auth.getUser();
+      const fileName = `store-${currentUser2?.id}-${Date.now()}.${fileExt}`;
 
-        const { error: uploadError } = await supabase.storage
-          .from('avatar')
-          .upload(fileName, tempStorePhotoFile, { upsert: true });
+      const { error: uploadError } = await supabase.storage
+        .from('avatar')
+        .upload(fileName, tempStorePhotoFile, { upsert: true });
 
-        if (!uploadError) {
-          const { data } = supabase.storage.from('avatar').getPublicUrl(fileName);
-          finalStorePhotoUrl = data.publicUrl;
-        }
-      } catch (err: any) {
-        console.error("Store photo upload failed", err);
+      if (uploadError) {
+        toast.error(`Gagal upload foto toko: ${uploadError.message}`);
+        setLoading(false);
+        return;
       }
+      const { data: urlData } = supabase.storage.from('avatar').getPublicUrl(fileName);
+      finalStorePhotoUrl = urlData.publicUrl;
     }
 
     // Check if store photo is missing (if not uploading now and not existing)
@@ -346,27 +335,6 @@ const MyAccountContent = () => {
     }
   };
 
-  const handleDeleteNotification = async (id: string) => {
-    if (!confirm("Hapus notifikasi ini?")) return;
-    const { error } = await supabase.from('notifications').delete().eq('id', id);
-    if (error) toast.error(translateError(error.message));
-    else {
-      toast.success("Notifikasi dihapus");
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) fetchNotifications(user.id);
-    }
-  };
-
-  const markAsRead = async (id: string) => {
-    const { error } = await supabase
-      .from('notifications')
-      .update({ is_read: true })
-      .eq('id', id);
-
-    if (!error) {
-      setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
-    }
-  };
 
 
   if (loading) {
@@ -410,7 +378,7 @@ const MyAccountContent = () => {
                   { id: "dashboard", label: "Dasbor", icon: <><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></> },
                   { id: "orders", label: "Pesanan", icon: <><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 0 1-8 0" /></>, isExternal: true, href: "/transactions", hiddenMobile: true },
                   { id: "addresses", label: "Alamat", icon: <><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></> },
-                  { id: "notifications", label: "Notifikasi", icon: <><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></>, badge: notifications.filter(n => !n.is_read).length },
+
                   { id: "account-details", label: "Detail Akun", icon: <><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></> },
                   { id: "testimonials", label: "Ulasan Saya", icon: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /> }
                 ].map((item: any) => (
@@ -575,125 +543,6 @@ const MyAccountContent = () => {
                 </div>
               )}
 
-              {activeTab === "notifications" && (
-                <div className="bg-white rounded-xl shadow-1 overflow-hidden">
-                  <div className="p-6 border-b border-gray-3 flex justify-between items-center">
-                    <h3 className="font-bold text-xl text-dark">Notifikasi Saya</h3>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={async () => {
-                          const { data: { user } } = await supabase.auth.getUser();
-                          if (user) {
-                            await supabase.from('notifications').update({ is_read: true }).eq('user_id', user.id);
-                            fetchNotifications(user.id);
-                            toast.success("Semua notifikasi ditandai dibaca");
-                          }
-                        }}
-                        className="text-xs font-bold text-blue hover:underline"
-                      >
-                        Tandai semua dibaca
-                      </button>
-                    </div>
-                  </div>
-                  <div className="p-0">
-                    {notifications.length > 0 ? (
-                      notifications.map((notif, i) => {
-                        // Aggressively override link to /transactions if it's an order or mentions related keywords
-                        const title = notif.title?.toLowerCase() || "";
-                        const message = notif.message?.toLowerCase() || "";
-                        const isOrder = notif.type === 'order' || 
-                                       title.includes('pesanan') || title.includes('transaksi') || title.includes('bayar') ||
-                                       message.includes('pesanan') || message.includes('transaksi') || message.includes('bayar');
-                        
-                        const orderId = notif.order_id || notif.metadata?.order_id;
-                        // Prioritize transaction link for orders, force it even if link exists
-                        const notifLink = isOrder ? (orderId ? `/transactions?id=${orderId}` : '/transactions') : (notif.link || '/shop');
-                        
-                        const handleNotifClick = () => {
-                          markAsRead(notif.id);
-                          window.location.href = notifLink;
-                        };
-
-                        return (
-                          <div 
-                            key={notif.id} 
-                            onClick={handleNotifClick}
-                            className={`p-6 border-b border-gray-3 flex gap-4 transition-colors hover:bg-gray-1/30 cursor-pointer ${!notif.is_read ? "bg-blue/5 border-l-4 border-l-blue" : ""}`}
-                          >
-                            <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center bg-blue/10 text-blue`}>
-                              {isOrder ? (
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" /></svg>
-                              ) : (
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                  <polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
-                                </svg>
-                              )}
-                            </div>
-                            <div className="flex-1 text-left">
-                              <div className="flex justify-between items-start mb-1">
-                                <h4 className={`font-bold ${!notif.is_read ? "text-dark" : "text-dark-4"}`}>{notif.title}</h4>
-                                <div className="flex items-center gap-3">
-                                  <span className="text-[10px] text-dark-5 whitespace-nowrap">
-                                    {new Date(notif.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
-                                  </span>
-                                  <button
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      e.stopPropagation();
-                                      handleDeleteNotification(notif.id);
-                                    }}
-                                    className="text-dark-5 hover:text-red transition-colors p-1"
-                                    title="Hapus notifikasi"
-                                  >
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                      <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                    </svg>
-                                  </button>
-                                </div>
-                              </div>
-                              <p className="text-sm text-dark-4 leading-relaxed mb-3">
-                                {notif.message.includes("Gunakan kode kupon:") ? (
-                                  <>
-                                    {notif.message.split("Gunakan kode kupon:")[0]}
-                                    Gunakan kode kupon:{" "}
-                                    <span 
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        const code = notif.message.split("Gunakan kode kupon:")[1].split(".")[0].trim();
-                                        navigator.clipboard.writeText(code);
-                                        toast.success(`Kode ${code} disalin!`, { id: 'copy-notif-account' });
-                                      }}
-                                      className="text-blue font-bold cursor-pointer hover:underline"
-                                    >
-                                      {notif.message.split("Gunakan kode kupon:")[1].split(".")[0]}
-                                    </span>
-                                    {notif.message.split("Gunakan kode kupon:")[1].split(".").slice(1).join(".")}
-                                  </>
-                                ) : (
-                                  notif.message
-                                )}
-                              </p>
-                              <div className="flex items-center gap-3">
-                                {notif.status && (
-                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue text-white uppercase">{notif.status}</span>
-                                )}
-                                {notifLink && (
-                                  <span className="text-xs font-bold text-blue hover:underline">Lihat Detail</span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })
-                    ) : (
-                      <div className="py-20 text-center">
-                        <p className="text-dark-4">Belum ada notifikasi.</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
 
               {activeTab === "account-details" && (
                 <div className="bg-white rounded-xl shadow-1 p-8 sm:p-10">
@@ -708,12 +557,12 @@ const MyAccountContent = () => {
                     <div className="flex items-center gap-6 mb-4">
                       <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-gray-3 bg-blue/5 flex items-center justify-center">
                         {(tempPhoto || profile.photo) ? (
-                          <Image
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
                             src={tempPhoto || profile.photo}
                             alt="Profile photo"
-                            width={80}
-                            height={80}
                             className="w-full h-full object-cover"
+                            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                           />
                         ) : (
                           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3C50E0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -723,7 +572,7 @@ const MyAccountContent = () => {
                         )}
                       </div>
                       <button type="button" onClick={() => fileInputRef.current?.click()} className="text-blue text-sm font-bold hover:underline">Ubah Foto</button>
-                      <input type="file" ref={fileInputRef} onChange={handlePhotoUpload} className="hidden" accept="image/*" />
+                      <input type="file" ref={fileInputRef} onChange={handlePhotoUpload} className="hidden" accept="image/jpeg,image/png,image/webp,image/gif" />
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div className="text-left"><label className="block mb-2 font-medium text-dark">Nama Penanggung Jawab <span className="text-red">*</span></label><input type="text" required value={profile.name} onChange={(e) => setProfile({ ...profile, name: e.target.value })} className="w-full p-3 bg-gray-1 border border-gray-3 rounded-lg" onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('Harap isi nama penanggung jawab')} onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')} /></div>
@@ -753,25 +602,33 @@ const MyAccountContent = () => {
                     <div className="text-left mt-4">
                       <label className="block mb-3 font-medium text-dark">Foto Toko / Tempat Usaha <span className="text-red">*</span></label>
                       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                        <div className="w-full sm:w-48 h-32 rounded-lg overflow-hidden border-2 border-dashed border-gray-4 bg-gray-1 flex items-center justify-center relative group">
+                        <div
+                          className="w-full sm:w-48 h-32 rounded-lg overflow-hidden border-2 border-dashed border-gray-4 bg-gray-1 flex items-center justify-center relative group cursor-pointer"
+                          onClick={() => storePhotoInputRef.current?.click()}
+                        >
                           {(tempStorePhoto || profile.storePhoto) ? (
-                            <Image
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
                               src={tempStorePhoto || profile.storePhoto}
-                              alt="Store"
-                              width={192}
-                              height={128}
+                              alt="Foto Toko"
                               className="w-full h-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none';
+                                (e.target as HTMLImageElement).parentElement!.querySelector('.photo-placeholder')?.removeAttribute('style');
+                              }}
                             />
-                          ) : (
-                            <div className="text-center p-4">
-                              <svg className="mx-auto mb-2 text-gray-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
-                              </svg>
-                              <p className="text-[10px] text-dark-5">Belum ada foto</p>
-                            </div>
-                          )}
-                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" onClick={() => storePhotoInputRef.current?.click()}>
-                            <span className="text-white text-xs font-bold">Ubah Foto</span>
+                          ) : null}
+                          <div
+                            className="photo-placeholder text-center p-4 absolute inset-0 flex flex-col items-center justify-center"
+                            style={{ display: (tempStorePhoto || profile.storePhoto) ? 'none' : 'flex' }}
+                          >
+                            <svg className="mx-auto mb-2 text-gray-4" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
+                            </svg>
+                            <p className="text-[10px] text-dark-5">Klik untuk pilih foto</p>
+                          </div>
+                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span className="text-white text-xs font-bold">📷 Ubah Foto</span>
                           </div>
                         </div>
                         <div className="flex-1">
@@ -780,10 +637,11 @@ const MyAccountContent = () => {
                             onClick={() => storePhotoInputRef.current?.click()}
                             className="bg-white border border-blue text-blue py-2 px-4 rounded-md text-sm font-bold hover:bg-blue/5 transition-all mb-2"
                           >
-                            Foto Usaha
+                            📂 Pilih Foto Usaha
                           </button>
-                          <p className="text-xs text-red font-medium leading-relaxed">
-                            *Unggah foto fisik toko, papan nama usaha Anda.
+                          <p className="text-xs text-dark-4 font-medium leading-relaxed mt-1">
+                            Format: JPG, PNG, WEBP<br />
+                            <span className="text-red">*Maks. 5MB. Unggah foto fisik toko atau papan nama usaha.</span>
                           </p>
                         </div>
                         <input
@@ -791,8 +649,7 @@ const MyAccountContent = () => {
                           ref={storePhotoInputRef}
                           onChange={handleStorePhotoUpload}
                           className="hidden"
-                          accept="image/*"
-                          capture="environment"
+                          accept="image/jpeg,image/png,image/webp,image/gif"
                         />
                       </div>
                     </div>
