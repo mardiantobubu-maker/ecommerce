@@ -20,10 +20,11 @@ const NotificationDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"order" | "promo">("order");
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0); // state terpisah agar tidak di-overwrite poll
+  const [unreadCount, setUnreadCount] = useState(0);
   const [shouldWiggle, setShouldWiggle] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const suppressPollRef = useRef(false);
 
   // Initialize audio on mount
   useEffect(() => {
@@ -73,8 +74,10 @@ const NotificationDropdown = () => {
         };
       });
       setNotifications(mapped);
-      // Update badge count dari DB (sumber kebenaran)
-      setUnreadCount(mapped.filter(n => !n.isRead).length);
+      // Hanya update badge count jika sedang tidak dalam mode "suppress"
+      if (!suppressPollRef.current) {
+        setUnreadCount(mapped.filter(n => !n.isRead).length);
+      }
     }
   };
 
@@ -273,15 +276,19 @@ const NotificationDropdown = () => {
   }, []);
 
   const markAllAsRead = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
-    // Set badge ke 0 SEKARANG — state terpisah, tidak bisa di-overwrite poll
+    // ① Set badge 0 & block poll SEBELUM semua operasi async
+    suppressPollRef.current = true;
     setUnreadCount(0);
-    // Update tampilan notifikasi juga
     setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
 
-    // Update DB di background
+    // ② Ambil user
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      suppressPollRef.current = false;
+      return;
+    }
+
+    // ③ Update DB
     const { error } = await supabase
       .from('notifications')
       .update({ is_read: true })
@@ -292,6 +299,9 @@ const NotificationDropdown = () => {
     } else {
       toast.success("Semua notifikasi ditandai dibaca", { id: 'mark-all-read' });
     }
+
+    // ④ Release block setelah 3 detik (beri waktu DB commit)
+    setTimeout(() => { suppressPollRef.current = false; }, 3000);
   };
 
   const markAsRead = async (id: string) => {
