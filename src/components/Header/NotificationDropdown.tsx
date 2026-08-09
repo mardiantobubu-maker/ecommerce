@@ -301,6 +301,22 @@ const NotificationDropdown = () => {
     }
   };
 
+  const deleteNotification = async (id: string) => {
+    // Optimistic update: langsung hapus dari UI
+    setNotifications(prev => prev.filter(n => n.id !== id));
+
+    const { error } = await supabase
+      .from('notifications')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      // Rollback jika gagal
+      fetchNotifications();
+      toast.error('Gagal menghapus notifikasi');
+    }
+  };
+
   const filteredNotifications = notifications.filter(n => n.type === activeTab);
 
   return (
@@ -409,72 +425,95 @@ const NotificationDropdown = () => {
               <div className="flex-1 overflow-y-auto no-scrollbar pb-10 lg:max-h-[400px] lg:pb-3">
                 {filteredNotifications.length > 0 ? (
                   filteredNotifications.map((item) => (
-                    <Link
+                    <div
                       key={item.id}
-                      href={item.link || "#"}
-                      className={`flex gap-4 border-b border-gray-2/50 px-5 py-4 transition-colors hover:bg-gray-1/50 ${
+                      className={`group relative flex items-stretch border-b border-gray-2/50 transition-colors hover:bg-gray-1/50 ${
                         !item.isRead ? "bg-blue/[0.08]" : ""
                       }`}
-                      onClick={() => {
-                        markAsRead(item.id);
-                        setIsOpen(false);
-                      }}
                     >
-                      <div className="flex-shrink-0">
-                        <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-blue/10 text-blue`}>
-                          {item.type === "order" ? (
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
-                            </svg>
-                          ) : (
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
-                            </svg>
-                          )}
+                      {/* Clickable notification area */}
+                      <Link
+                        href={item.link || "#"}
+                        className="flex flex-1 gap-4 px-5 py-4"
+                        onClick={() => {
+                          markAsRead(item.id);
+                          setIsOpen(false);
+                        }}
+                      >
+                        <div className="flex-shrink-0">
+                          <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-blue/10 text-blue`}>
+                            {item.type === "order" ? (
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                              </svg>
+                            ) : (
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                              </svg>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between gap-2">
-                          <p className={`text-base lg:text-sm font-bold ${!item.isRead ? "text-dark" : "text-dark-4"}`}>
-                            {item.title}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2">
+                            <p className={`text-base lg:text-sm font-bold truncate ${!item.isRead ? "text-dark" : "text-dark-4"}`}>
+                              {item.title}
+                            </p>
+                            {!item.isRead && <span className="h-2 w-2 flex-shrink-0 rounded-full bg-blue"></span>}
+                          </div>
+                          <p className="mt-0.5 text-sm lg:text-xs leading-relaxed text-dark-4 line-clamp-2">
+                            {item.message.includes("Gunakan kode kupon:") ? (
+                              <>
+                                {item.message.split("Gunakan kode kupon:")[0]}
+                                Gunakan kode kupon:{" "}
+                                <span 
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    const code = item.message.split("Gunakan kode kupon:")[1].split(".")[0].trim();
+                                    navigator.clipboard.writeText(code);
+                                    toast.success(`Kode ${code} disalin!`, { id: 'copy-notif' });
+                                  }}
+                                  className="text-blue font-bold cursor-pointer hover:underline"
+                                >
+                                  {item.message.split("Gunakan kode kupon:")[1].split(".")[0]}
+                                </span>
+                                {item.message.split("Gunakan kode kupon:")[1].split(".").slice(1).join(".")}
+                              </>
+                            ) : (
+                              item.message
+                            )}
                           </p>
-                          {!item.isRead && <span className="h-2 w-2 rounded-full bg-blue"></span>}
-                        </div>
-                        <p className="mt-0.5 text-sm lg:text-xs leading-relaxed text-dark-4 line-clamp-2">
-                          {item.message.includes("Gunakan kode kupon:") ? (
-                            <>
-                              {item.message.split("Gunakan kode kupon:")[0]}
-                              Gunakan kode kupon:{" "}
-                              <span 
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  const code = item.message.split("Gunakan kode kupon:")[1].split(".")[0].trim();
-                                  navigator.clipboard.writeText(code);
-                                  toast.success(`Kode ${code} disalin!`, { id: 'copy-notif' });
-                                }}
-                                className="text-blue font-bold cursor-pointer hover:underline"
-                              >
-                                {item.message.split("Gunakan kode kupon:")[1].split(".")[0]}
-                              </span>
-                              {item.message.split("Gunakan kode kupon:")[1].split(".").slice(1).join(".")}
-                            </>
-                          ) : (
-                            item.message
-                          )}
-                        </p>
-                        <div className="mt-2 flex items-center justify-between">
-                          <span className="text-xs lg:text-[10px] font-medium text-dark-5">
-                            {item.time}
-                          </span>
-                          {item.status && (
-                            <span className="rounded-full bg-blue/10 px-2 py-0.5 text-[10px] font-bold text-blue">
-                              {item.status}
+                          <div className="mt-2 flex items-center justify-between">
+                            <span className="text-xs lg:text-[10px] font-medium text-dark-5">
+                              {item.time}
                             </span>
-                          )}
+                            {item.status && (
+                              <span className="rounded-full bg-blue/10 px-2 py-0.5 text-[10px] font-bold text-blue">
+                                {item.status}
+                              </span>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </Link>
+                      </Link>
+
+                      {/* Delete Button */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteNotification(item.id);
+                        }}
+                        title="Hapus notifikasi"
+                        className="flex-shrink-0 flex items-center justify-center w-10 opacity-0 group-hover:opacity-100 transition-all duration-200 text-dark-5 hover:text-red hover:bg-red/5 border-l border-gray-2/50"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M3 6h18"/>
+                          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                          <line x1="10" y1="11" x2="10" y2="17"/>
+                          <line x1="14" y1="11" x2="14" y2="17"/>
+                        </svg>
+                      </button>
+                    </div>
                   ))
                 ) : (
                   <div className="flex flex-col items-center justify-center py-20 px-5 text-center">
