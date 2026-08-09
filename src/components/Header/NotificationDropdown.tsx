@@ -375,7 +375,7 @@ const NotificationDropdown = () => {
                 </div>
                 <button 
                   onClick={markAllAsRead}
-                  className="text-xs font-semibold text-blue hover:underline"
+                  className="text-base lg:text-xs font-semibold text-blue hover:underline"
                 >
                   Tandai semua dibaca
                 </button>
@@ -385,7 +385,7 @@ const NotificationDropdown = () => {
               <div className="flex border-b border-gray-2 bg-gray-1/50 p-1 mx-4 my-3 rounded-xl shrink-0">
                 <button
                   onClick={() => setActiveTab("order")}
-                  className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${
+                  className={`flex-1 rounded-lg py-2 text-base lg:text-sm font-medium transition-all ${
                     activeTab === "order" 
                       ? "bg-white text-blue shadow-sm" 
                       : "text-dark-4 hover:text-dark"
@@ -395,7 +395,7 @@ const NotificationDropdown = () => {
                 </button>
                 <button
                   onClick={() => setActiveTab("promo")}
-                  className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${
+                  className={`flex-1 rounded-lg py-2 text-base lg:text-sm font-medium transition-all ${
                     activeTab === "promo" 
                       ? "bg-white text-blue shadow-sm" 
                       : "text-dark-4 hover:text-dark"
@@ -435,12 +435,12 @@ const NotificationDropdown = () => {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between gap-2">
-                          <p className={`text-sm font-bold ${!item.isRead ? "text-dark" : "text-dark-4"}`}>
+                          <p className={`text-base lg:text-sm font-bold ${!item.isRead ? "text-dark" : "text-dark-4"}`}>
                             {item.title}
                           </p>
                           {!item.isRead && <span className="h-2 w-2 rounded-full bg-blue"></span>}
                         </div>
-                        <p className="mt-0.5 text-xs leading-relaxed text-dark-4 line-clamp-2">
+                        <p className="mt-0.5 text-sm lg:text-xs leading-relaxed text-dark-4 line-clamp-2">
                           {item.message.includes("Gunakan kode kupon:") ? (
                             <>
                               {item.message.split("Gunakan kode kupon:")[0]}
@@ -464,7 +464,7 @@ const NotificationDropdown = () => {
                           )}
                         </p>
                         <div className="mt-2 flex items-center justify-between">
-                          <span className="text-[10px] font-medium text-dark-5">
+                          <span className="text-xs lg:text-[10px] font-medium text-dark-5">
                             {item.time}
                           </span>
                           {item.status && (
