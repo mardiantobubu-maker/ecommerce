@@ -20,10 +20,10 @@ const NotificationDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"order" | "promo">("order");
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0); // state terpisah agar tidak di-overwrite poll
   const [shouldWiggle, setShouldWiggle] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const suppressPollRef = useRef(false); // block poll setelah mark all read
 
   // Initialize audio on mount
   useEffect(() => {
@@ -53,7 +53,7 @@ const NotificationDropdown = () => {
       .order('created_at', { ascending: false });
 
     if (data && !error) {
-      setNotifications(data.map(n => {
+      const mapped = data.map(n => {
         const title = n.title?.toLowerCase() || "";
         const message = n.message?.toLowerCase() || "";
         const isOrder = n.type === 'order' || 
@@ -62,7 +62,6 @@ const NotificationDropdown = () => {
         
         const finalType = isOrder ? 'order' : 'promo';
         const orderId = n.order_id || n.metadata?.order_id;
-        // Aggressively force /transactions for any order-related notification
         const targetLink = isOrder ? (orderId ? `/transactions?id=${orderId}` : '/transactions') : (n.link || '/shop');
 
         return {
@@ -72,7 +71,10 @@ const NotificationDropdown = () => {
           time: formatRelativeTime(n.created_at),
           link: targetLink
         };
-      }));
+      });
+      setNotifications(mapped);
+      // Update badge count dari DB (sumber kebenaran)
+      setUnreadCount(mapped.filter(n => !n.isRead).length);
     }
   };
 
@@ -144,6 +146,8 @@ const NotificationDropdown = () => {
                       link: targetLink
                     }, ...prev];
                   });
+                  // Tambah 1 ke badge count
+                  if (!newNotif.is_read) setUnreadCount(prev => prev + 1);
                   triggerWiggle();
                   playNotificationSound();
                   showNotificationToast(newNotif.title, newNotif.message, 'blue', targetLink);
@@ -245,7 +249,7 @@ const NotificationDropdown = () => {
     setupSubscriptions();
 
     const pollInterval = setInterval(() => {
-      if (isMounted && !suppressPollRef.current) fetchNotifications();
+      if (isMounted) fetchNotifications();
     }, 10000);
 
     return () => {
@@ -256,7 +260,7 @@ const NotificationDropdown = () => {
     };
   }, []);
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+  // unreadCount dikelola sebagai state terpisah (lihat useState di atas)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -272,14 +276,12 @@ const NotificationDropdown = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    // Optimistic update langsung agar UI responsif
+    // Set badge ke 0 SEKARANG — state terpisah, tidak bisa di-overwrite poll
+    setUnreadCount(0);
+    // Update tampilan notifikasi juga
     setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
 
-    // Block poll selama 5 detik agar tidak overwrite optimistic state
-    suppressPollRef.current = true;
-    setTimeout(() => { suppressPollRef.current = false; }, 5000);
-
-    // Update semua notifikasi user di DB
+    // Update DB di background
     const { error } = await supabase
       .from('notifications')
       .update({ is_read: true })
@@ -287,8 +289,6 @@ const NotificationDropdown = () => {
 
     if (error) {
       toast.error("Gagal menandai semua dibaca", { id: 'mark-all-read' });
-      // Fetch ulang dari DB untuk mendapatkan state yang akurat
-      setTimeout(() => fetchNotifications(), 1000);
     } else {
       toast.success("Semua notifikasi ditandai dibaca", { id: 'mark-all-read' });
     }
