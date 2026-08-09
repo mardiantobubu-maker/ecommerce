@@ -227,12 +227,6 @@ const MyAccountContent = () => {
       finalStorePhotoUrl = urlData.publicUrl;
     }
 
-    // Check if store photo is missing (if not uploading now and not existing)
-    if (!finalStorePhotoUrl && !tempStorePhotoFile) {
-      toast.error("Foto toko/tempat usaha wajib diunggah.");
-      setLoading(false);
-      return;
-    }
 
     const { error } = await supabase.auth.updateUser({
       email: profile.email,
@@ -599,7 +593,7 @@ const MyAccountContent = () => {
                     </div>
 
                     <div className="text-left mt-4">
-                      <label className="block mb-3 font-medium text-dark">Foto Toko / Tempat Usaha <span className="text-red">*</span></label>
+                      <label className="block mb-3 font-medium text-dark">Foto Toko / Tempat Usaha <span className="text-dark-4 text-xs font-normal">(Opsional)</span></label>
                       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
                         <div
                           className="w-full sm:w-48 h-32 rounded-lg overflow-hidden border-2 border-dashed border-gray-4 bg-gray-1 flex items-center justify-center relative group cursor-pointer"
