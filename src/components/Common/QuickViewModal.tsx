@@ -90,18 +90,21 @@ const QuickViewModal = () => {
 
   useEffect(() => {
     const fetchReviews = async () => {
-      if (!isModalOpen) return;
+      if (!isModalOpen || !product?.id) return;
       const { data, error } = await supabase
         .from('testimonials')
         .select('id,name,role,comment,rating,image_url')
+        .eq('product_id', product.id)
         .order('id', { ascending: false });
 
       if (!error && data) {
         setReviews(data);
+      } else {
+        setReviews([]);
       }
     };
     fetchReviews();
-  }, [isModalOpen]);
+  }, [isModalOpen, product?.id]);
 
   useEffect(() => {
     // closing modal while clicking outside

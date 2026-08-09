@@ -18,16 +18,7 @@ import Link from "next/link";
 import KodiSizeMatrix, { ColorVariant } from "./KodiSizeMatrix";
 import { calculateKodiPrice, isValidKodiQuantity, formatRupiah, getDiscountTiers, KODI_SIZE, getKodiDiscount, pcsToKodi } from "@/utils/kodiPricing";
 
-const initialReviews = [
-  {
-    id: 1,
-    name: "Ibu Siti",
-    role: "Orang Tua Murid",
-    image: "/images/users/user-01.jpg",
-    rating: 5,
-    comment: "Kualitas seragamnya sangat bagus, anak saya sangat nyaman memakainya ke sekolah. Terima kasih Toko Seragam!",
-  }
-];
+
 
 const getStoredProduct = () => {
   if (typeof window === "undefined") return null;
@@ -71,12 +62,11 @@ const ShopDetails = () => {
   const [isReviewDropdownOpen, setIsReviewDropdownOpen] = useState(false);
 
   // Review states
-  const [reviews, setReviews] = useState(initialReviews);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const hasSeededDummyReview = useRef(false);
 
   const syncProductReviewSummary = async () => {
     if (!product?.id) return;
@@ -155,64 +145,13 @@ const ShopDetails = () => {
               prev?.id ? { ...prev, reviews: derivedReviewsCount, rating: derivedRating } : prev
             );
           }
-          return;
-        }
-
-        if (hasSeededDummyReview.current) {
-          if (isMounted) setReviews(initialReviews);
-          return;
-        }
-        hasSeededDummyReview.current = true;
-
-        // Seed dummy review...
-        const dummyPayload = {
-          product_id: resolvedProductId,
-          name: "Ibu Siti",
-          role: "Orang Tua Murid",
-          comment: "Kualitas seragamnya sangat bagus, anak saya sangat nyaman memakainya ke sekolah. Terima kasih Toko Seragam!",
-          rating: 5,
-          image_url: "/images/users/user-01.jpg"
-        };
-
-        const { data: existingDummy } = await supabase
-          .from('testimonials')
-          .select('id,name,role,comment,rating,image_url')
-          .eq('product_id', resolvedProductId)
-          .eq('name', dummyPayload.name)
-          .eq('comment', dummyPayload.comment)
-          .eq('rating', dummyPayload.rating)
-          .limit(1);
-
-        if (!isMounted) return;
-
-        if (existingDummy && existingDummy.length > 0) {
-          const dummy = existingDummy[0];
-          setReviews([{
-            id: dummy.id,
-            name: dummy.name,
-            role: dummy.role,
-            image: dummy.image_url || "/images/users/user-01.jpg",
-            rating: dummy.rating,
-            comment: dummy.comment
-          }]);
-          return;
-        }
-
-        const { data: seededData } = await supabase.from('testimonials').insert([dummyPayload]).select('*');
-        if (!isMounted) return;
-
-        if (seededData && seededData.length > 0) {
-          const seeded = seededData[0];
-          setReviews([{
-            id: seeded.id,
-            name: seeded.name,
-            role: seeded.role,
-            image: seeded.image_url || "/images/users/user-01.jpg",
-            rating: seeded.rating,
-            comment: seeded.comment
-          }]);
         } else {
-          setReviews(initialReviews);
+          if (isMounted) {
+            setReviews([]);
+            setProduct((prev: any) =>
+              prev?.id ? { ...prev, reviews: 0, rating: 0 } : prev
+            );
+          }
         }
       };
 
