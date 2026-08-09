@@ -81,7 +81,7 @@ const ShopDetails = () => {
   const syncProductReviewSummary = async () => {
     if (!product?.id) return;
     
-    const { data: ratingsData } = await supabase.from("testimonials").select("rating");
+    const { data: ratingsData } = await supabase.from("testimonials").select("rating").eq('product_id', product.id);
     const totalReviews = ratingsData?.length || 0;
     const avgRating =
       totalReviews > 0
@@ -113,9 +113,12 @@ const ShopDetails = () => {
     let isMounted = true;
 
     const fetchReviewsSafe = async () => {
+      if (!initialProduct?.id) return;
+      
       const { data } = await supabase
         .from('testimonials')
         .select('*')
+        .eq('product_id', initialProduct.id)
         .order('created_at', { ascending: false });
 
       if (!isMounted) return;
@@ -161,6 +164,7 @@ const ShopDetails = () => {
 
       // Seed dummy review...
       const dummyPayload = {
+        product_id: initialProduct.id,
         name: "Ibu Siti",
         role: "Orang Tua Murid",
         comment: "Kualitas seragamnya sangat bagus, anak saya sangat nyaman memakainya ke sekolah. Terima kasih Toko Seragam!",
@@ -171,6 +175,7 @@ const ShopDetails = () => {
       const { data: existingDummy } = await supabase
         .from('testimonials')
         .select('id,name,role,comment,rating,image_url')
+        .eq('product_id', initialProduct.id)
         .eq('name', dummyPayload.name)
         .eq('comment', dummyPayload.comment)
         .eq('rating', dummyPayload.rating)
@@ -211,15 +216,17 @@ const ShopDetails = () => {
 
     fetchReviewsSafe();
 
-    // Set up Realtime subscription
+    // Set up Realtime subscription (filter by product_id on the client side since realtime filters need exact match config on server)
     const channel = supabase
-      .channel('testimonials-realtime-v2')
+      .channel(`testimonials-realtime-v2-${initialProduct?.id || 'new'}`)
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'testimonials' },
         (payload: any) => {
           if (!isMounted) return;
           const newItem = payload.new;
+          if (newItem.product_id !== initialProduct?.id) return; // Only process reviews for this product
+
           const formattedReview = {
             id: newItem.id,
             name: newItem.name,
@@ -341,6 +348,7 @@ const ShopDetails = () => {
 
     try {
       const { error } = await supabase.from('testimonials').insert([{
+        product_id: product.id,
         name,
         role: "Pembeli Terverifikasi",
         comment,
