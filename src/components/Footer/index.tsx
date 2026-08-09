@@ -145,31 +145,31 @@ const Footer = () => {
 
             <ul className="flex flex-col gap-3.5">
               <li>
-                <Link className="ease-out duration-200 hover:text-blue" href="/my-account">
+                <Link className="ease-out duration-200 hover:text-blue" href="/my-account" prefetch={false}>
                   Akunku
                 </Link>
               </li>
               <li>
-                <Link className="ease-out duration-200 hover:text-blue" href="/signin">
+                <Link className="ease-out duration-200 hover:text-blue" href="/signin" prefetch={false}>
                   Masuk
                 </Link>
                 {' / '}
-                <Link className="ease-out duration-200 hover:text-blue" href="/signup">
+                <Link className="ease-out duration-200 hover:text-blue" href="/signup" prefetch={false}>
                   Daftar
                 </Link>
               </li>
               <li>
-                <Link className="ease-out duration-200 hover:text-blue" href="/cart">
+                <Link className="ease-out duration-200 hover:text-blue" href="/cart" prefetch={false}>
                   Keranjang
                 </Link>
               </li>
               <li>
-                <Link className="ease-out duration-200 hover:text-blue" href="/wishlist">
+                <Link className="ease-out duration-200 hover:text-blue" href="/wishlist" prefetch={false}>
                   Favorit
                 </Link>
               </li>
               <li>
-                <Link className="ease-out duration-200 hover:text-blue" href="/shop-with-sidebar">
+                <Link className="ease-out duration-200 hover:text-blue" href="/shop-with-sidebar" prefetch={false}>
                   Toko
                 </Link>
               </li>
@@ -203,7 +203,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link className="ease-out duration-200 hover:text-blue" href="/contact">
+                <Link className="ease-out duration-200 hover:text-blue" href="/contact" prefetch={false}>
                   Kontak
                 </Link>
               </li>
