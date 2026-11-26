@@ -1,0 +1,25 @@
+.range-slider {
+ @apply w-full !h-[4px] rounded-md bg-blue relative mb-3;
+}
+
+.slider .thumb {
+  @apply w-6 h-6 bg-blue-dark rounded-full absolute -top-2 border-[5px] border-blue-light-4;
+}
+
+.range-slider__thumb {
+  @apply !bg-white border-[1px] border-blue-light-4 flex justify-center items-center !w-7 !h-7;
+}
+
+.range-slider__thumb::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  display: block;
+  border-radius: 100%;
+  position: absolute;
+  @apply bg-blue;
+}
+
+.range-slider__range {
+  @apply !bg-blue;
+}
