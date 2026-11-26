@@ -18,6 +18,33 @@ export async function GET() {
   return NextResponse.json(data);
 }
 
+export async function POST(request: Request) {
+  if (!supabaseAdmin) {
+    return NextResponse.json({ error: "Supabase Admin not configured" }, { status: 500 });
+  }
+
+  try {
+    const body = await request.json();
+    const { first_name, last_name, subject, phone, message } = body;
+
+    if (!first_name || !last_name || !message) {
+      return NextResponse.json({ error: "Data tidak lengkap" }, { status: 400 });
+    }
+
+    const { error } = await supabaseAdmin
+      .from('contacts')
+      .insert([{ first_name, last_name, subject: subject || '', phone: phone || '', message }]);
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
 export async function DELETE(request: Request) {
   if (!supabaseAdmin) {
     return NextResponse.json({ error: "Supabase Admin not configured" }, { status: 500 });

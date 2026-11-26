@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
 import SupportSidebar from "../SupportSidebar";
-import { supabase } from "@/lib/supabase";
+
 import { Spinner } from "../Common/PreLoader";
 
 interface FormData {
@@ -77,19 +77,22 @@ const Contact = () => {
     setSubmitStatus("idle");
 
     try {
-      const { error } = await supabase
-        .from('contacts')
-        .insert([
-          {
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            subject: formData.subject,
-            phone: formData.phone,
-            message: formData.message
-          }
-        ]);
+      const res = await fetch('/api/admin/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          subject: formData.subject,
+          phone: formData.phone,
+          message: formData.message,
+        }),
+      });
 
-      if (error) throw error;
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Gagal menyimpan pesan');
+      }
 
       if (isMountedState) {
         setSubmitStatus("success");
