@@ -168,7 +168,7 @@ const SingleOrder = ({ orderItem }: any) => {
               <p className="text-[10px] font-bold text-red uppercase tracking-tight leading-snug">Alasan: {orderItem.cancellation_note}</p>
             </div>
           )}
-          {(status === 'shipped' || status === 'shipping') && (
+          {(status === 'shipped' || status === 'shipping') && orderItem.payment_method !== 'cash' && (
             <Link
               href={`/tracking?id=${orderId}`}
               className="inline-flex items-center gap-1.5 mt-2 bg-green text-white text-[11px] font-bold px-3 py-1.5 rounded-lg hover:bg-green-dark transition-all"
@@ -178,6 +178,11 @@ const SingleOrder = ({ orderItem }: any) => {
               </svg>
               Lacak
             </Link>
+          )}
+          {(status === 'shipped' || status === 'shipping') && orderItem.payment_method === 'cash' && (
+            <span className="inline-flex items-center gap-1.5 mt-2 bg-orange text-white text-[11px] font-bold px-3 py-1.5 rounded-lg">
+              🛵 COD
+            </span>
           )}
         </div>
 
@@ -236,7 +241,7 @@ const SingleOrder = ({ orderItem }: any) => {
                         status === "on-hold" ? "Ditahan" :
                           status === "canceled" ? "Batal" : status}
               </span>
-              {(status === 'shipped' || status === 'shipping') && (
+              {(status === 'shipped' || status === 'shipping') && orderItem.payment_method !== 'cash' && (
                 <Link
                   href={`/tracking?id=${orderId}`}
                   className="inline-flex items-center gap-1.5 mt-1 bg-green text-white text-[11px] font-bold px-3 py-1.5 rounded-lg hover:bg-green-dark transition-all"
@@ -246,6 +251,11 @@ const SingleOrder = ({ orderItem }: any) => {
                   </svg>
                   Lacak
                 </Link>
+              )}
+              {(status === 'shipped' || status === 'shipping') && orderItem.payment_method === 'cash' && (
+                <span className="inline-flex items-center gap-1.5 mt-1 bg-orange text-white text-[11px] font-bold px-3 py-1.5 rounded-lg">
+                  🛵 COD
+                </span>
               )}
             </div>
           </div>
