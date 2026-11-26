@@ -224,12 +224,20 @@ const AdminCountdown = () => {
                   />
                 </div>
                 {formData.image_url && (
-                  <div className="relative w-full h-24 rounded-lg overflow-hidden border border-gray-3 bg-gray-1">
-                    <img src={formData.image_url} alt="Preview" className="w-full h-full object-contain" />
+                  <div className="relative w-full h-28 rounded-lg overflow-hidden border border-gray-3 bg-gray-1 flex items-center justify-center p-2">
+                    <img 
+                      src={formData.image_url} 
+                      alt="Preview" 
+                      className="max-h-full max-w-full object-contain" 
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/images/products/terbaru-seragam-sd.png";
+                      }}
+                    />
                     <button 
                       type="button"
                       onClick={() => setFormData({...formData, image_url: ""})}
-                      className="absolute top-1 right-1 bg-red text-white p-1 rounded-md hover:bg-red-dark shadow-sm"
+                      className="absolute top-1.5 right-1.5 bg-red text-white p-1 rounded-md hover:bg-red-dark shadow-sm transition-all"
+                      title="Hapus Gambar"
                     >
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>

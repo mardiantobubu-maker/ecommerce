@@ -160,7 +160,6 @@ const PromoBanner = () => {
               style={{ backgroundColor: item.bg_color || "#F5F5F7" }}
             >
                <div className="relative z-10">
-                  <span className="block text-sm text-dark mb-1 opacity-70">{item.subtitle}</span>
                   <h2 className="font-bold text-base text-dark mb-2 uppercase">{item.discount_text || item.title}</h2>
                   <p className="text-sm text-[#212121] line-clamp-2 mb-3">{item.subtitle}</p>
                   

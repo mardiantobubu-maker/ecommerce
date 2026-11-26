@@ -147,8 +147,8 @@ const CounDown = () => {
           />
           <div className="hidden lg:block absolute right-4 xl:right-33 bottom-4 xl:bottom-10 -z-1 drop-shadow-2xl animate-float">
              <Image
-               src="/images/products/terbaru-seragam-sd.png"
-               alt="Promo"
+               src={promo.image_url || "/images/products/terbaru-seragam-sd.png"}
+               alt={promo.title || "Promo"}
                width={450}
                height={450}
                className="max-w-[450px] h-auto rounded-lg object-contain"
