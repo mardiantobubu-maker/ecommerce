@@ -13,7 +13,7 @@ const SingleItem = ({ item, isPriority }: { item: Category; isPriority?: boolean
         {item.img ? (
           <Image 
             src={item.img} 
-            alt="" 
+            alt={item.title || "Kategori Seragam Sekolah"} 
             width={82} 
             height={62} 
             style={{ width: "100%", height: "auto" }}

@@ -3,8 +3,9 @@ import Cart from "@/components/Cart";
 
 import { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "Keranjang Belanja | Toko Seragam Sekolah",
+  title: "Keranjang Belanja",
   description: "Lihat item yang Anda pilih dan lanjutkan ke pembayaran.",
+  robots: { index: false, follow: false },
 };
 
 const CartPage = () => {

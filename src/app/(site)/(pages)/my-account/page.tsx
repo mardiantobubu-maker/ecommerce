@@ -3,9 +3,9 @@ import React from "react";
 
 import { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "My Account | NextCommerce Nextjs E-commerce template",
-  description: "This is My Account page for NextCommerce Template",
-  // other metadata
+  title: "Akun Saya",
+  description: "Kelola profil akun, alamat pengiriman, dan pesanan Anda di Seragam Grosir.",
+  robots: { index: false, follow: false },
 };
 
 const MyAccountPage = () => {

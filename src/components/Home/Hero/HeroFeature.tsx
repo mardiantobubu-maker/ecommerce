@@ -31,7 +31,7 @@ const HeroFeature = () => {
         {featureData.map((item, key) => (
           <div className="flex items-center gap-4 min-w-[200px] sm:min-w-fit snap-center flex-shrink-0" key={key}>
             <div className="w-12 h-12 flex-shrink-0">
-              <Image src={item.img} alt="icons" width={40} height={41} className="w-full h-full object-contain" />
+              <Image src={item.img} alt={item.title} width={40} height={41} className="w-full h-full object-contain" />
             </div>
 
             <div className="whitespace-nowrap">

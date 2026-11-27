@@ -23,8 +23,8 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 
   if (!product) return { title: "Produk Tidak Ditemukan | Seragam Sekolah" };
 
-  const fullTitle = `${product.title} - Grosir Seragam Sekolah Premium`;
-  const cleanDesc = product.description?.replace(/<[^>]*>/g, '').substring(0, 160) || "Beli Seragam Sekolah kualitas premium harga pabrik.";
+  const fullTitle = `${product.title} - Harga Grosir Pabrik`;
+  const cleanDesc = product.description?.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().substring(0, 155) || "Beli Seragam Sekolah kualitas premium harga pabrik.";
 
   return {
     title: fullTitle,

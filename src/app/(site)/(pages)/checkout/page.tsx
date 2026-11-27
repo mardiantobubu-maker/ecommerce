@@ -3,8 +3,9 @@ import Checkout from "@/components/Checkout";
 
 import { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "Halaman Pembayaran | Toko Seragam Sekolah",
+  title: "Pembayaran",
   description: "Selesaikan pesanan seragam sekolah Anda dengan aman.",
+  robots: { index: false, follow: false },
 };
 
 const CheckoutPage = () => {

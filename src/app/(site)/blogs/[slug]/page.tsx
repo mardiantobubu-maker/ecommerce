@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     : `Baca selengkapnya mengenai ${blog.title} hanya di Toko Seragam Sekolah.`;
 
   return {
-    title: `${blog.title} | Toko Seragam Sekolah`,
+    title: blog.title,
     description: cleanDesc,
     openGraph: {
       type: "article",

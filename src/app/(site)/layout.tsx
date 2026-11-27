@@ -24,8 +24,8 @@ const euclid = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(domain),
   title: {
-    default: "Grosir Seragam Sekolah SD SMP SMA - Supplier Tangan Pertama Harga Pabrik",
-    template: "%s | Seragam Sekolah Premium",
+    default: "Grosir Seragam Sekolah SD SMP SMA - Harga Pabrik | Seragam Grosir",
+    template: "%s | Seragam Grosir",
   },
   description: "Supplier seragam sekolah tangan pertama terlengkap. Sedia grosir seragam sekolah SD, SMP, SMA kualitas premium harga pabrik. Konveksi terpercaya untuk pesanan sekolah & yayasan ke seluruh Indonesia.",
   keywords: [
@@ -38,15 +38,21 @@ export const metadata: Metadata = {
     "seragam sd smp sma", 
     "konveksi seragam sekolah terpercaya",
   ],
-  authors: [{ name: "Toko Seragam Sekolah Premium" }],
-  creator: "Toko Seragam Sekolah",
+  authors: [{ name: "Seragam Grosir" }],
+  creator: "Seragam Grosir",
   openGraph: {
     type: "website",
     locale: "id_ID",
     url: domain,
-    title: "Seragam Sekolah Kualitas Premium - Grosir Terpercaya",
+    title: "Grosir Seragam Sekolah Kualitas Premium | Seragam Grosir",
     description: "Koleksi seragam sekolah premium SD, SMP, SMA dengan harga grosir terbaik. Bahan nyaman, warna tidak pudar, dan ukuran lengkap.",
-    siteName: "Seragam Sekolah Premium",
+    siteName: "Seragam Grosir",
+    images: [
+      {
+        url: "/images/hero/seragam-sekolah-kualitas-terbaik.png",
+        alt: "Grosir Seragam Sekolah SD SMP SMA",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",

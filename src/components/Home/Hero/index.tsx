@@ -30,7 +30,7 @@ const Hero = ({ initialBanners = [] }: { initialBanners?: any[] }) => {
                   <span className="font-bold text-xl text-red">{sidebarTop?.discount_text || "Harga Spesial"}</span>
                 </div>
                 <div className="flex-1 w-full relative">
-                  <ImageWithSkeleton src={sidebarTop?.image_url || "/images/products/terbaru-seragam-sd.png"} alt="promo" fill loading="eager" sizes="250px" className="object-contain object-bottom relative z-10" skeletonClassName="rounded-[10px]" />
+                  <ImageWithSkeleton src={sidebarTop?.image_url || "/images/products/terbaru-seragam-sd.png"} alt={sidebarTop?.title || "Paket Seragam Lengkap"} fill loading="eager" sizes="250px" className="object-contain object-bottom relative z-10" skeletonClassName="rounded-[10px]" />
                 </div>
               </div>
             </div>
@@ -48,7 +48,7 @@ const Hero = ({ initialBanners = [] }: { initialBanners?: any[] }) => {
                   <span className="font-bold text-xl text-red leading-none">{sidebarBottom?.discount_text || "20% OFF"}</span>
                 </div>
                 <div className="flex-1 w-full relative">
-                  <ImageWithSkeleton src={sidebarBottom?.image_url || "/images/products/seragam-smp.png"} alt="promo" fill loading="eager" sizes="250px" className="object-contain object-bottom relative z-10" skeletonClassName="rounded-[10px]" />
+                  <ImageWithSkeleton src={sidebarBottom?.image_url || "/images/products/seragam-smp.png"} alt={sidebarBottom?.title || "Seragam SMP & SMA"} fill loading="eager" sizes="250px" className="object-contain object-bottom relative z-10" skeletonClassName="rounded-[10px]" />
                 </div>
               </div>
             </div>
@@ -75,7 +75,7 @@ const Hero = ({ initialBanners = [] }: { initialBanners?: any[] }) => {
                       <span className="font-black text-2xl xl:text-3xl text-red">{item?.discount_text || ""}</span>
                     </div>
                     <div className="relative w-[45%] h-full">
-                      <ImageWithSkeleton src={item?.image_url || "/images/products/terbaru-seragam-sd.png"} alt="promo" fill priority loading="eager" fetchPriority="high" sizes="(max-width: 1280px) 35vw, 250px" className="object-contain object-right relative z-10" skeletonClassName="rounded-[10px]" />
+                      <ImageWithSkeleton src={item?.image_url || "/images/products/terbaru-seragam-sd.png"} alt={item?.title || "Promo Seragam Sekolah"} fill priority loading="eager" fetchPriority="high" sizes="(max-width: 1280px) 35vw, 250px" className="object-contain object-right relative z-10" skeletonClassName="rounded-[10px]" />
                     </div>
                   </div>
                 </div>

@@ -34,6 +34,12 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.seragamgrosir.com' }],
+        destination: 'https://seragamgrosir.com/:path*',
+        permanent: true,
+      },
+      {
         source: '/shop-with-sidebar',
         destination: '/seragamsekolah',
         permanent: true,
