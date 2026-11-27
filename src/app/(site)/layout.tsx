@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import localFont from "next/font/local";
 import "../css/style.css";
 import ClientLayoutWrapper from "@/components/Common/ClientLayoutWrapper";
+import { domain } from "@/lib/seo";
 
 const euclid = localFont({
   src: [
@@ -21,7 +22,7 @@ const euclid = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.seragamsekolah.com"),
+  metadataBase: new URL(domain),
   title: {
     default: "Grosir Seragam Sekolah SD SMP SMA - Supplier Tangan Pertama Harga Pabrik",
     template: "%s | Seragam Sekolah Premium",
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "https://www.seragamsekolah.com",
+    url: domain,
     title: "Seragam Sekolah Kualitas Premium - Grosir Terpercaya",
     description: "Koleksi seragam sekolah premium SD, SMP, SMA dengan harga grosir terbaik. Bahan nyaman, warna tidak pudar, dan ukuran lengkap.",
     siteName: "Seragam Sekolah Premium",

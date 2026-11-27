@@ -1,7 +1,7 @@
 import React from "react";
 import ShopDetails from "@/components/ShopDetails";
 import { Metadata } from "next";
-import { generateProductSchema } from "@/lib/seo";
+import { domain, generateProductSchema } from "@/lib/seo";
 import { supabase } from "@/lib/supabase";
 
 export const dynamic = 'force-dynamic';
@@ -34,7 +34,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
       images: [product.image_url],
     },
     alternates: {
-      canonical: `https://www.seragamsekolah.com/shop-details?id=${id}`,
+      canonical: `${domain}/shop-details?id=${id}`,
     }
   };
 }
@@ -52,6 +52,7 @@ const ShopDetailsPage = async ({ searchParams }: Props) => {
 
     if (product) {
       productSchema = generateProductSchema({
+        id: product.id,
         name: product.title,
         description: product.description?.replace(/<[^>]*>/g, '') || "",
         image: product.image_url,

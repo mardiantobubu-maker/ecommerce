@@ -1,4 +1,4 @@
-export const domain = "https://www.seragamsekolah.com";
+export const domain = (process.env.NEXT_PUBLIC_SITE_URL || "https://seragamgrosir.com").replace(/\/+$/, "");
 
 export function generateOrganizationSchema() {
   return {
@@ -30,6 +30,7 @@ export function generateWebSiteSchema() {
 }
 
 export function generateProductSchema(product: {
+  id?: string | number;
   name: string;
   description: string;
   image: string;
@@ -46,7 +47,7 @@ export function generateProductSchema(product: {
     sku: product.sku,
     offers: {
       "@type": "Offer",
-      url: `${domain}/shop-details`,
+      url: `${domain}/shop-details${product.id ? `?id=${product.id}` : ""}`,
       priceCurrency: "IDR",
       price: product.price,
       priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],

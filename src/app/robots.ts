@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
- 
+import { domain } from '@/lib/seo'
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
@@ -7,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/', '/admin/', '/seragamsekolah-admin/'],
     },
-    sitemap: 'https://www.seragamsekolah.com/sitemap.xml',
+    sitemap: `${domain}/sitemap.xml`,
   }
 }
