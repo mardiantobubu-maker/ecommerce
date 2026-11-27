@@ -56,6 +56,9 @@ export const metadata: Metadata = {
   other: {
     "google": "notranslate",
   },
+  ...(process.env.GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
+    : {}),
 };
 
 import { SpeedInsights } from "@vercel/speed-insights/next";

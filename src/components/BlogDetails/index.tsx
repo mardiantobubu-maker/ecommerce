@@ -104,7 +104,7 @@ const BlogDetails = ({ blog }: { blog: BlogItem }) => {
 
   return (
     <>
-      <Breadcrumb title="Detail Blog" pages={["detail blog"]} />
+      <Breadcrumb title="Detail Blog" pages={["detail blog"]} headingAs="p" />
       <section className="overflow-hidden mt-0 pt-[10px] pb-10 lg:py-20 bg-white">
         <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-8 xl:px-6 2xl:px-0">
           <div className="rounded-[10px] overflow-hidden mb-7.5 bg-gray-50 group relative">
@@ -174,9 +174,9 @@ const BlogDetails = ({ blog }: { blog: BlogItem }) => {
             </span>
 
             <div className="blog-power-bar">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl leading-[1.2]">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl leading-[1.2]">
                 {blog.title}
-              </h2>
+              </h1>
             </div>
 
             {blog.content ? (

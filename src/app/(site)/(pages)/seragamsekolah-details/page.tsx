@@ -3,6 +3,7 @@ import ShopDetails from "@/components/ShopDetails";
 import { Metadata } from "next";
 import { domain, generateProductSchema } from "@/lib/seo";
 import { supabase } from "@/lib/supabase";
+import { normalizeProduct } from "@/lib/product-format";
 
 export const dynamic = 'force-dynamic';
 
@@ -42,15 +43,20 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 const SeragamSekolahDetailsPage = async ({ searchParams }: Props) => {
   const { id } = await searchParams;
   let productSchema = null;
+  let initialProduct = null;
 
   if (id) {
+    const normalizedId = Number(id);
+    const lookupId = Number.isNaN(normalizedId) ? id : normalizedId;
+
     const { data: product } = await supabase
       .from('products')
       .select('*')
-      .eq('id', id)
-      .single();
+      .eq('id', lookupId)
+      .maybeSingle();
 
     if (product) {
+      initialProduct = normalizeProduct(product);
       productSchema = generateProductSchema({
         id: product.id,
         name: product.title,
@@ -64,7 +70,7 @@ const SeragamSekolahDetailsPage = async ({ searchParams }: Props) => {
   }
 
   return (
-    <main>
+    <>
       {productSchema && (
         <script
           type="application/ld+json"
@@ -72,9 +78,9 @@ const SeragamSekolahDetailsPage = async ({ searchParams }: Props) => {
         />
       )}
       <React.Suspense fallback={null}>
-        <ShopDetails />
+        <ShopDetails initialProduct={initialProduct} />
       </React.Suspense>
-    </main>
+    </>
   );
 };
 

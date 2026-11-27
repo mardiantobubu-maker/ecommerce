@@ -1,7 +1,18 @@
 import Link from "next/link";
 import React from "react";
 
-const Breadcrumb = ({ title, pages, maxW = "max-w-[1280px]" }) => {
+const Breadcrumb = ({
+  title,
+  pages,
+  maxW = "max-w-[1280px]",
+  headingAs = "h1",
+}: {
+  title: string;
+  pages: string[];
+  maxW?: string;
+  headingAs?: "h1" | "p";
+}) => {
+  const HeadingTag = headingAs;
   return (
     <>
       {/* Mobile Spacer */}
@@ -10,9 +21,9 @@ const Breadcrumb = ({ title, pages, maxW = "max-w-[1280px]" }) => {
       <div className="hidden sm:block overflow-hidden bg-white border-b border-gray-3 pt-[170px] px-0 pb-[16px] sm:pt-[155px] lg:pt-[95px] xl:pt-[165px]">
         <div className={`${maxW} w-full mx-auto px-4 sm:px-8 xl:px-6 2xl:px-0 py-2.5 xl:py-10`}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <h1 className="font-semibold text-dark text-base sm:text-2xl xl:text-custom-2">
+            <HeadingTag className="font-semibold text-dark text-base sm:text-2xl xl:text-custom-2">
               {title}
-            </h1>
+            </HeadingTag>
 
             <ul className="hidden sm:flex items-center gap-2">
               <li className="text-custom-sm hover:text-blue">

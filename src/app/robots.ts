@@ -6,7 +6,19 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/admin/', '/seragamsekolah-admin/'],
+      disallow: [
+        '/api/',
+        '/admin/',
+        '/seragamsekolah-admin/',
+        '/cart/',
+        '/checkout/',
+        '/my-account/',
+        '/transactions/',
+        '/wishlist/',
+        '/signin/',
+        '/signup/',
+        '/reset-password/',
+      ],
     },
     sitemap: `${domain}/sitemap.xml`,
   }

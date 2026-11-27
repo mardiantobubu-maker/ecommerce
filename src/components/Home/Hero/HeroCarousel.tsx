@@ -1,8 +1,9 @@
 import ImageWithSkeleton from "@/components/Common/ImageWithSkeleton";
 import Link from "next/link";
 
-const HeroCarousel = ({ banners = [], priority = true }: { banners?: any[], priority?: boolean }) => {
+const HeroCarousel = ({ banners = [], priority = true, headingAs = "h1" }: { banners?: any[], priority?: boolean, headingAs?: "h1" | "h2" }) => {
   const activeBanner = banners.length > 0 ? banners[0] : null;
+  const HeadingTag = headingAs;
 
   if (!activeBanner) {
     return (
@@ -19,9 +20,9 @@ const HeroCarousel = ({ banners = [], priority = true }: { banners?: any[], prio
                   <span className="block text-dark text-custom-1 leading-tight uppercase font-bold opacity-50 tracking-wider">DISKON</span>
                 </div>
                 
-                <h1 className="max-w-none font-bold text-dark text-[18px] sm:text-3xl lg:text-4xl mb-2 sm:mb-4 leading-tight">
+                <HeadingTag className="max-w-none font-bold text-dark text-[18px] sm:text-3xl lg:text-4xl mb-2 sm:mb-4 leading-tight">
                   <Link href="/seragamsekolah">Seragam Sekolah Kualitas Terbaik</Link>
-                </h1>
+                </HeadingTag>
                 
                 <div className="flex flex-col items-center sm:items-start">
                   <p className="text-[16px] sm:text-base lg:text-lg text-[#212121] opacity-60 mb-1 sm:mb-6 leading-normal">
@@ -83,9 +84,9 @@ const HeroCarousel = ({ banners = [], priority = true }: { banners?: any[], prio
                 </div>
               )}
               
-              <h1 className="max-w-none font-black text-dark text-[18px] sm:text-3xl lg:text-4xl mb-2 sm:mb-4 leading-tight tracking-tight">
+              <HeadingTag className="max-w-none font-black text-dark text-[18px] sm:text-3xl lg:text-4xl mb-2 sm:mb-4 leading-tight tracking-tight">
                 <Link href={activeBanner.button_link || "/seragamsekolah"}>{activeBanner.title}</Link>
-              </h1>
+              </HeadingTag>
               
               <div className="flex flex-col items-center sm:items-start">
                 <p className="text-[16px] sm:text-base lg:text-lg text-[#212121] opacity-60 mb-1 sm:mb-6 font-medium leading-normal">

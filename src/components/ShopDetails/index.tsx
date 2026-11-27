@@ -34,7 +34,7 @@ const getStoredProduct = () => {
   }
 };
 
-const ShopDetails = () => {
+const ShopDetails = ({ initialProduct = null }: { initialProduct?: any }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -48,14 +48,14 @@ const ShopDetails = () => {
 
   const cartItems = useAppSelector((state) => state.cartReducer.items);
 
-  const [product, setProduct] = useState<any>(null);
-  const [activeColor, setActiveColor] = useState("");
+  const [product, setProduct] = useState<any>(initialProduct);
+  const [activeColor, setActiveColor] = useState(initialProduct?.colors?.[0] || "");
   const { openPreviewModal } = usePreviewSlider();
   const { openCartModal } = useCartModalContext();
   const [previewImg, setPreviewImg] = useState(0);
 
-  const [type, setType] = useState("");
-  const [selectedSize, setSelectedSize] = useState("");
+  const [type, setType] = useState((initialProduct?.sleeves?.[0] || "").toLowerCase());
+  const [selectedSize, setSelectedSize] = useState(initialProduct?.sizes?.[0] || "");
   const [sim, setSim] = useState("");
   const [variantBreakdown, setVariantBreakdown] = useState<{ [key: string]: number }>({});
   const [activeTab, setActiveTab] = useState("tabTwo");
@@ -526,11 +526,11 @@ const ShopDetails = () => {
 
   const actualRating = reviews.length > 0 
     ? Number((reviews.reduce((sum, rev) => sum + Number(rev.rating || 0), 0) / reviews.length).toFixed(1))
-    : 0;
+    : (product?.rating || 0);
 
   return (
     <>
-      <Breadcrumb title={"Detail Produk"} pages={["detail produk"]} />
+      <Breadcrumb title={"Detail Produk"} pages={["detail produk"]} headingAs="p" />
       <section className="overflow-hidden mt-0 pt-[10px] pb-4 lg:pb-5 lg:pt-8 bg-white animate-fadeIn">
         <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-8 xl:px-6 2xl:px-0">
           <div className="flex flex-col lg:flex-row gap-8 xl:gap-15 items-stretch">

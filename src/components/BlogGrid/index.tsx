@@ -7,15 +7,23 @@ import { supabase } from "@/lib/supabase";
 import PreLoader from "../Common/PreLoader";
 import BlogSkeleton from "../Common/BlogSkeleton";
 
-const BlogGridContent = () => {
+const BlogGridContent = ({
+  initialBlogs,
+  initialTotalItems,
+  initialTags,
+}: {
+  initialBlogs?: any[];
+  initialTotalItems?: number;
+  initialTags?: string[];
+}) => {
   const searchParams = useSearchParams();
   const initialTag = searchParams.get("tag") || "Semua";
   const [selectedTag, setSelectedTag] = useState(initialTag);
   
-  const [blogs, setBlogs] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [blogs, setBlogs] = useState<any[]>(initialBlogs || []);
+  const [loading, setLoading] = useState(!initialBlogs);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
+  const [totalItems, setTotalItems] = useState(initialTotalItems || 0);
   const itemsPerPage = 6;
 
   useEffect(() => {
@@ -24,7 +32,7 @@ const BlogGridContent = () => {
       setSelectedTag(tagFromUrl);
     }
   }, [searchParams]);
-  const [tags, setTags] = useState(["Semua"]);
+  const [tags, setTags] = useState<string[]>(initialTags || ["Semua"]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -63,7 +71,9 @@ const BlogGridContent = () => {
   useEffect(() => {
     let isMounted = true;
     const fetchBlogsSafe = async () => {
-      setLoading(true);
+      if (blogs.length === 0 || selectedTag !== "Semua" || currentPage !== 1) {
+        setLoading(true);
+      }
       const from = (currentPage - 1) * itemsPerPage;
       const to = from + itemsPerPage - 1;
 
@@ -272,10 +282,22 @@ const BlogGridContent = () => {
   );
 };
 
-const BlogGrid = () => {
+const BlogGrid = ({
+  initialBlogs,
+  initialTotalItems,
+  initialTags,
+}: {
+  initialBlogs?: any[];
+  initialTotalItems?: number;
+  initialTags?: string[];
+} = {}) => {
   return (
     <Suspense fallback={<PreLoader />}>
-      <BlogGridContent />
+      <BlogGridContent
+        initialBlogs={initialBlogs}
+        initialTotalItems={initialTotalItems}
+        initialTags={initialTags}
+      />
     </Suspense>
   );
 };

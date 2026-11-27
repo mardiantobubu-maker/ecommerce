@@ -15,7 +15,7 @@ const Hero = ({ initialBanners = [] }: { initialBanners?: any[] }) => {
           {/* Mobile + Tablet Slider (< lg) */}
           <div className="flex lg:hidden overflow-x-auto no-scrollbar gap-5 -mx-4 px-4 snap-x snap-mandatory pb-4">
             <div className="min-w-[85%] sm:min-w-[60%] snap-center relative rounded-[10px] bg-white overflow-hidden shadow-sm border border-gray-3 h-[300px] sm:h-[400px]">
-              <HeroCarousel banners={mainBanners} priority={false} />
+              <HeroCarousel banners={mainBanners} priority={false} headingAs="h2" />
             </div>
             <div
               className="min-w-[85%] sm:min-w-[60%] h-[300px] sm:h-[400px] snap-center relative rounded-[10px] pt-4 pb-3 px-6 flex flex-col justify-center shadow-sm border border-gray-3"

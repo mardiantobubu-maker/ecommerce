@@ -81,7 +81,7 @@ const BestSeller = ({ initialBestSellers }: { initialBestSellers?: Product[] }) 
             </span>
             <h2 className="font-semibold text-[20px] lg:text-[28px] text-dark">Produk Terlaris</h2>
           </div>
-          <Link href="/shop-without-sidebar" className="inline-flex font-medium text-sm py-2 px-6 rounded-md border-gray-3 border bg-white text-dark ease-out duration-200 hover:bg-blue hover:text-white hover:border-blue shadow-sm">
+          <Link href="/seragamsekolah" className="inline-flex font-medium text-sm py-2 px-6 rounded-md border-gray-3 border bg-white text-dark ease-out duration-200 hover:bg-blue hover:text-white hover:border-blue shadow-sm">
             Lihat Semua
           </Link>
         </div>

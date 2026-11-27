@@ -1,7 +1,7 @@
 import Home from "@/components/Home";
 import Hero from "@/components/Home/Hero";
 import { Metadata } from "next";
-import { generateOrganizationSchema, generateWebSiteSchema } from "@/lib/seo";
+import { domain, generateOrganizationSchema, generateWebSiteSchema } from "@/lib/seo";
 import { supabase } from "@/lib/supabase";
 
 export const revalidate = 3600;
@@ -9,6 +9,9 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Grosir Seragam Sekolah SD SMP SMA - Supplier Tangan Pertama",
   description: "Selamat datang di Supplier Seragam Sekolah Tangan Pertama. Menyediakan grosir seragam sekolah SD, SMP, SMA berkualitas premium dengan harga pabrik langsung dari konveksi.",
+  alternates: {
+    canonical: domain,
+  },
 };
 
 export default async function HomePage() {
