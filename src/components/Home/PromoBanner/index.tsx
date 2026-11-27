@@ -51,7 +51,7 @@ const PromoBanner = () => {
 
 
               <Link
-                href={bigBanner?.button_link || "/shop-with-sidebar"}
+                href={bigBanner?.button_link || "/seragamsekolah"}
                 className="inline-flex font-medium text-custom-sm text-white bg-blue py-[11px] px-9.5 rounded-md ease-out duration-200 hover:bg-blue-dark mt-7.5"
               >
                 {bigBanner?.button_text}
@@ -105,7 +105,7 @@ const PromoBanner = () => {
                 </p>
 
                 <Link
-                  href={smallBanner1?.button_link || "/shop-with-sidebar"}
+                  href={smallBanner1?.button_link || "/seragamsekolah"}
                   className="inline-flex font-medium text-custom-sm text-white bg-teal py-2.5 px-8.5 rounded-md ease-out duration-200 hover:bg-teal-dark mt-9"
                 >
                   {smallBanner1?.button_text}
@@ -141,7 +141,7 @@ const PromoBanner = () => {
                 </h2>
 
                 <Link
-                  href={smallBanner2?.button_link || "/shop-with-sidebar"}
+                  href={smallBanner2?.button_link || "/seragamsekolah"}
                   className="inline-flex font-medium text-custom-sm text-white bg-orange py-2.5 px-8.5 rounded-md ease-out duration-200 hover:bg-orange-dark mt-7.5"
                 >
                   {smallBanner2?.button_text}
@@ -166,7 +166,7 @@ const PromoBanner = () => {
 
 
                   <div className="flex justify-center mb-4">
-                    <Link href={item.button_link || "/shop-with-sidebar"} className="inline-flex font-bold text-xs text-white bg-blue py-2.5 px-8 rounded-md shadow-md">{item.button_text}</Link>
+                    <Link href={item.button_link || "/seragamsekolah"} className="inline-flex font-bold text-xs text-white bg-blue py-2.5 px-8 rounded-md shadow-md">{item.button_text}</Link>
                   </div>
                </div>
                <div className="relative w-full h-[180px] mt-2 overflow-hidden">

@@ -6,7 +6,7 @@ import Link from "next/link";
 const SingleItem = ({ item, isPriority }: { item: Category; isPriority?: boolean }) => {
   return (
     <Link 
-      href={`/shop-with-sidebar?search=${item.title.replace(/\s+/g, '-')}`} 
+      href={`/seragamsekolah?search=${item.title.replace(/\s+/g, '-')}`} 
       className="group flex flex-col items-center"
     >
       <div className="max-w-[130px] w-full bg-[#F2F3F8] h-32.5 rounded-full flex items-center justify-center mb-4 overflow-hidden">

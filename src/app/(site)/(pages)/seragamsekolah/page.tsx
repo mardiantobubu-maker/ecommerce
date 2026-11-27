@@ -1,14 +1,18 @@
 import React from "react";
 import ShopWithSidebar from "@/components/ShopWithSidebar";
 import { supabase } from "@/lib/supabase";
+import { domain } from "@/lib/seo";
 
 import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Toko Seragam Sekolah | Pilihan Lengkap & Berkualitas",
   description: "Beli seragam sekolah SD, SMP, SMA, Pramuka, dan Batik berkualitas tinggi dengan harga terjangkau di Toko Seragam kami.",
+  alternates: {
+    canonical: `${domain}/seragamsekolah`,
+  },
 };
 
-const ShopWithSidebarPage = async () => {
+const SeragamSekolahPage = async () => {
   const { data } = await supabase
     .from('products')
     .select('*')
@@ -49,4 +53,4 @@ const ShopWithSidebarPage = async () => {
   );
 };
 
-export default ShopWithSidebarPage;
+export default SeragamSekolahPage;

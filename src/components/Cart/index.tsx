@@ -168,7 +168,7 @@ const Cart = () => {
             <p className="pb-6">Keranjang Anda kosong!</p>
 
             <Link
-              href="/shop-with-sidebar"
+              href="/seragamsekolah"
               className="w-full max-w-[400px] mx-auto flex justify-center font-medium text-white bg-blue py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-blue-dark"
             >
               Lanjut Berbelanja

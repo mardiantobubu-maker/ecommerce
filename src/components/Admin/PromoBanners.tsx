@@ -19,7 +19,7 @@ const AdminPromoBanners = () => {
     discount_text: "",
     image_url: "",
     button_text: "Belanja Sekarang",
-    button_link: "/shop-with-sidebar",
+    button_link: "/seragamsekolah",
     bg_color: "#ffffff",
     coupon_code: ""
   });
@@ -52,7 +52,7 @@ const AdminPromoBanners = () => {
           discount_text: '25% DISKON',
           image_url: '/images/hero/seragam-sekolah-kualitas-terbaik.png',
           button_text: 'Belanja Sekarang',
-          button_link: '/shop-with-sidebar',
+          button_link: '/seragamsekolah',
           bg_color: '#ffffff',
           coupon_code: ''
         },
@@ -63,7 +63,7 @@ const AdminPromoBanners = () => {
           discount_text: 'Harga Spesial',
           image_url: '/images/products/terbaru-seragam-sd.png',
           button_text: 'Lihat Produk',
-          button_link: '/shop-with-sidebar',
+          button_link: '/seragamsekolah',
           bg_color: '#ffffff',
           coupon_code: ''
         },
@@ -74,7 +74,7 @@ const AdminPromoBanners = () => {
           discount_text: '20% OFF',
           image_url: '/images/products/seragam-smp.png',
           button_text: 'Lihat Produk',
-          button_link: '/shop-with-sidebar',
+          button_link: '/seragamsekolah',
           bg_color: '#ffffff',
           coupon_code: ''
         }
@@ -223,7 +223,7 @@ const AdminPromoBanners = () => {
         discount_text: "",
         image_url: "",
         button_text: "Belanja Sekarang",
-        button_link: "/shop-with-sidebar",
+        button_link: "/seragamsekolah",
         bg_color: "#ffffff",
         coupon_code: ""
       });
@@ -261,7 +261,7 @@ const AdminPromoBanners = () => {
                   discount_text: "",
                   image_url: "",
                   button_text: "Belanja Sekarang",
-                  button_link: "/shop-with-sidebar",
+                  button_link: "/seragamsekolah",
                   bg_color: "#ffffff",
                   coupon_code: ""
                 });

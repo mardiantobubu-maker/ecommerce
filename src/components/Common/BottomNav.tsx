@@ -22,7 +22,7 @@ const BottomNav = () => {
     },
     {
       name: "Kategori",
-      href: "/shop-with-sidebar",
+      href: "/seragamsekolah",
       icon: (isActive: boolean) => (
         <svg width="22" height="22" viewBox="0 0 24 24" fill={isActive ? "currentColor" : "none"} stroke="currentColor" strokeWidth={isActive ? "0" : "2"} strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="3" width="8" height="8" rx="1.5" fill={isActive ? "currentColor" : "none"}></rect>

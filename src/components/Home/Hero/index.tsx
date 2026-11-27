@@ -24,7 +24,7 @@ const Hero = ({ initialBanners = [] }: { initialBanners?: any[] }) => {
               <div className="flex flex-col-reverse items-center gap-3 h-full">
                 <div className="text-center w-full">
                   <h2 className="font-semibold text-dark text-[18px] mb-2 line-clamp-2 leading-tight">
-                    <Link href={sidebarTop?.button_link || "/shop-with-sidebar"}>{sidebarTop?.title || "Paket Seragam Lengkap"}</Link>
+                    <Link href={sidebarTop?.button_link || "/seragamsekolah"}>{sidebarTop?.title || "Paket Seragam Lengkap"}</Link>
                   </h2>
                   <p className="font-medium text-[#212121] text-[16px] mb-1 opacity-70">{sidebarTop?.subtitle || "Promo Terbatas"}</p>
                   <span className="font-bold text-xl text-red">{sidebarTop?.discount_text || "Harga Spesial"}</span>
@@ -42,7 +42,7 @@ const Hero = ({ initialBanners = [] }: { initialBanners?: any[] }) => {
                 <div className="text-center w-full">
                   <span className="block font-medium text-[16px] text-[#212121] mb-2 uppercase tracking-wider opacity-60">{sidebarBottom?.subtitle || "Promo Seragam"}</span>
                   <h2 className="font-semibold text-dark text-[18px] mb-2 line-clamp-2 leading-tight">
-                    <Link href={sidebarBottom?.button_link || "/shop-with-sidebar"}>{sidebarBottom?.title || "Seragam SMP & SMA"}</Link>
+                    <Link href={sidebarBottom?.button_link || "/seragamsekolah"}>{sidebarBottom?.title || "Seragam SMP & SMA"}</Link>
                   </h2>
                   <p className="font-medium text-[16px] text-[#212121] mb-1 opacity-70">Diskon Spesial</p>
                   <span className="font-bold text-xl text-red leading-none">{sidebarBottom?.discount_text || "20% OFF"}</span>

@@ -12,7 +12,7 @@ export const menuData: Menu[] = [
     id: 2,
     title: "Toko",
     newTab: false,
-    path: "/shop-with-sidebar",
+    path: "/seragamsekolah",
     prefetch: false,
   },
 

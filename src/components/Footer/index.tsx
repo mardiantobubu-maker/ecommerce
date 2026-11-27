@@ -169,7 +169,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link className="ease-out duration-200 hover:text-blue" href="/shop-with-sidebar" prefetch={false}>
+                <Link className="ease-out duration-200 hover:text-blue" href="/seragamsekolah" prefetch={false}>
                   Toko
                 </Link>
               </li>

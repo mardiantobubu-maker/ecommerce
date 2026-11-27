@@ -256,7 +256,7 @@ const ShopDetails = () => {
 
       if (!resolvedProduct || !resolvedProduct.id) {
         if (!productIdFromUrl) {
-          router.replace("/shop-with-sidebar");
+          router.replace("/seragamsekolah");
           return;
         }
         setProduct({ title: "NOT_FOUND" });
@@ -359,7 +359,7 @@ const ShopDetails = () => {
           {product?.title === "NOT_FOUND" ? "Produk tidak ditemukan atau telah dihapus." : "Memuat produk..."}
         </p>
         {product?.title === "NOT_FOUND" && (
-          <Link href="/shop-with-sidebar" className="text-blue hover:underline font-bold">
+          <Link href="/seragamsekolah" className="text-blue hover:underline font-bold">
             Kembali ke Toko
           </Link>
         )}

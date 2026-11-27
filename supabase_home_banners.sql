@@ -51,7 +51,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- 5. Insert default data
 INSERT INTO home_banners (type, title, subtitle, discount_text, coupon_code, image_url, button_text, button_link, bg_color)
 VALUES 
-('BIG', 'Koleksi Seragam Sekolah 2026', 'Persiapkan putra-putri Anda dengan seragam sekolah berkualitas terbaik. Nyaman dipakai, tahan lama, dan sesuai standar nasional.', 'DISKON HINGGA 30%', 'SERAGAM2026', '/images/products/terbaru-seragam-sd.png', 'Beli Sekarang', '/shop-with-sidebar', '#F5F5F7'),
-('SMALL_1', 'Kualitas Premium', 'Seragam SMP & SMA', 'Diskon tetap 20%', 'MITRA20', '/images/products/seragam-smp.png', 'Dapatkan Sekarang', '/shop-with-sidebar', '#DBF4F3'),
-('SMALL_2', 'Seragam Pramuka', 'Lengkapi atribut pramuka lengkap untuk kegiatan ekstrakurikuler yang lebih bersemangat.', 'Diskon hingga 40%', 'PRAMUKA40', '/images/products/seragam-pramuka.png', 'Beli Sekarang', '/shop-with-sidebar', '#FFECE1')
+('BIG', 'Koleksi Seragam Sekolah 2026', 'Persiapkan putra-putri Anda dengan seragam sekolah berkualitas terbaik. Nyaman dipakai, tahan lama, dan sesuai standar nasional.', 'DISKON HINGGA 30%', 'SERAGAM2026', '/images/products/terbaru-seragam-sd.png', 'Beli Sekarang', '/seragamsekolah', '#F5F5F7'),
+('SMALL_1', 'Kualitas Premium', 'Seragam SMP & SMA', 'Diskon tetap 20%', 'MITRA20', '/images/products/seragam-smp.png', 'Dapatkan Sekarang', '/seragamsekolah', '#DBF4F3'),
+('SMALL_2', 'Seragam Pramuka', 'Lengkapi atribut pramuka lengkap untuk kegiatan ekstrakurikuler yang lebih bersemangat.', 'Diskon hingga 40%', 'PRAMUKA40', '/images/products/seragam-pramuka.png', 'Beli Sekarang', '/seragamsekolah', '#FFECE1')
 ON CONFLICT DO NOTHING;

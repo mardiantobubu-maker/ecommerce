@@ -183,7 +183,7 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
       params.append("search", formattedCategory);
     }
 
-    router.push(`/shop-with-sidebar?${params.toString()}`);
+    router.push(`/seragamsekolah?${params.toString()}`);
   };
 
   const mobileActions = (
@@ -273,10 +273,10 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
                           const categoryOption = options.find(opt => opt.value === val);
                           if (categoryOption) {
                             if (val === "0") {
-                              router.push(`/shop-with-sidebar`);
+                              router.push(`/seragamsekolah`);
                             } else {
                               const formattedLabel = categoryOption.label.replace(/\s+/g, '-');
-                              router.push(`/shop-with-sidebar?search=${formattedLabel}`);
+                              router.push(`/seragamsekolah?search=${formattedLabel}`);
                             }
                           }
                         }}

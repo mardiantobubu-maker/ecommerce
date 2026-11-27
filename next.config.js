@@ -31,6 +31,15 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  async redirects() {
+    return [
+      {
+        source: '/shop-with-sidebar',
+        destination: '/seragamsekolah',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

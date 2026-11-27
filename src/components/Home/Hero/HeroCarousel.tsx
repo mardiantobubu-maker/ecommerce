@@ -20,7 +20,7 @@ const HeroCarousel = ({ banners = [], priority = true }: { banners?: any[], prio
                 </div>
                 
                 <h1 className="max-w-none font-bold text-dark text-[18px] sm:text-3xl lg:text-4xl mb-2 sm:mb-4 leading-tight">
-                  <Link href="/shop-with-sidebar">Seragam Sekolah Kualitas Terbaik</Link>
+                  <Link href="/seragamsekolah">Seragam Sekolah Kualitas Terbaik</Link>
                 </h1>
                 
                 <div className="flex flex-col items-center sm:items-start">
@@ -36,7 +36,7 @@ const HeroCarousel = ({ banners = [], priority = true }: { banners?: any[], prio
               </div>
 
               <Link
-                href="/shop-with-sidebar"
+                href="/seragamsekolah"
                 className="hidden sm:inline-flex font-bold text-white text-custom-sm rounded-md bg-blue py-3 px-9 ease-out duration-200 hover:bg-blue-dark mt-4"
               >
                 Belanja Sekarang
@@ -84,7 +84,7 @@ const HeroCarousel = ({ banners = [], priority = true }: { banners?: any[], prio
               )}
               
               <h1 className="max-w-none font-black text-dark text-[18px] sm:text-3xl lg:text-4xl mb-2 sm:mb-4 leading-tight tracking-tight">
-                <Link href={activeBanner.button_link || "/shop-with-sidebar"}>{activeBanner.title}</Link>
+                <Link href={activeBanner.button_link || "/seragamsekolah"}>{activeBanner.title}</Link>
               </h1>
               
               <div className="flex flex-col items-center sm:items-start">
@@ -101,7 +101,7 @@ const HeroCarousel = ({ banners = [], priority = true }: { banners?: any[], prio
             </div>
 
             <Link
-              href={activeBanner.button_link || "/shop-with-sidebar"}
+              href={activeBanner.button_link || "/seragamsekolah"}
               className="hidden sm:inline-flex font-bold text-white text-custom-sm rounded-xl bg-blue py-3 px-10 ease-out duration-300 hover:bg-blue-dark hover:shadow-lg hover:-translate-y-0.5 uppercase tracking-widest shadow-md mt-4"
             >
               {activeBanner.button_text || "Belanja Sekarang"}

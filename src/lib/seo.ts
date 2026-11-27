@@ -23,7 +23,7 @@ export function generateWebSiteSchema() {
     name: "Seragam Sekolah Terbaik | Toko Seragam Lengkap",
     potentialAction: {
       "@type": "SearchAction",
-      target: `${domain}/shop-with-sidebar?q={search_term_string}`,
+      target: `${domain}/seragamsekolah?search={search_term_string}`,
       "query-input": "required name=search_term_string"
     }
   };

@@ -251,7 +251,7 @@ const Orders = () => {
             Anda belum melakukan pembelian apapun. Mulai belanja sekarang untuk melihat riwayat pesanan Anda di sini.
           </p>
           <Link
-            href="/shop-with-sidebar"
+            href="/seragamsekolah"
             className="inline-flex justify-center items-center py-3 px-10 text-white bg-blue font-bold rounded-full ease-out duration-200 hover:bg-blue-dark shadow-lg transform active:scale-95"
           >
             Mulai Belanja
@@ -303,7 +303,7 @@ const Orders = () => {
                 Anda belum melakukan pembelian apapun. Mulai belanja sekarang untuk melihat riwayat pesanan Anda di sini.
               </p>
               <Link
-                href="/shop-with-sidebar"
+                href="/seragamsekolah"
                 className="inline-flex justify-center items-center py-3 px-10 text-white bg-blue font-bold rounded-full ease-out duration-200 hover:bg-blue-dark shadow-lg transform active:scale-95"
               >
                 Mulai Belanja

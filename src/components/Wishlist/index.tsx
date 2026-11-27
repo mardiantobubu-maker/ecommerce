@@ -85,7 +85,7 @@ export const Wishlist = () => {
                 Sepertinya Anda belum menambahkan produk favorit. Mulai jelajahi produk kami dan temukan seragam terbaik untuk Anda.
               </p>
               <Link
-                href="/shop-with-sidebar"
+                href="/seragamsekolah"
                 className="inline-flex justify-center items-center py-3.5 px-10 text-white bg-blue font-bold rounded-full ease-out duration-200 hover:bg-blue-dark transform active:scale-95"
               >
                 Lanjut Belanja
