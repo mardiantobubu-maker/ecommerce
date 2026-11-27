@@ -51,7 +51,7 @@ const SingleItem = ({ item, removeItemFromCart }) => {
 
         <div className="flex-1 min-w-0">
           <h3 className="font-bold text-dark text-base mb-1 transition-colors hover:text-blue line-clamp-1">
-            <Link href={`/shop-details?id=${item.id}`} onClick={() => closeCartModal()}> {item.title || "Produk"} </Link>
+            <Link href={`/seragamsekolah-details?id=${item.id}`} onClick={() => closeCartModal()}> {item.title || "Produk"} </Link>
           </h3>
           
           <div className="flex items-baseline gap-1.5 mb-2">

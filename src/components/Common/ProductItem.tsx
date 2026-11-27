@@ -70,7 +70,7 @@ const ProductItem = ({ item, priority = false }: { item: Product; priority?: boo
       {/* Image Section - Top */}
       <div className="relative aspect-square w-full bg-white rounded-[8px] mb-4">
         <Link
-          href={`/shop-details?id=${item.id}`}
+          href={`/seragamsekolah-details?id=${item.id}`}
           onClick={() => handleProductDetails()}
           className="w-full h-full flex items-center justify-center relative"
         >
@@ -104,7 +104,7 @@ const ProductItem = ({ item, priority = false }: { item: Product; priority?: boo
 
           {/* Pilih Ukuran Button */}
           <Link
-            href={`/shop-details?id=${item.id}`}
+            href={`/seragamsekolah-details?id=${item.id}`}
             onClick={() => handleProductDetails()}
             className="flex-1 inline-flex justify-center items-center font-extrabold text-[12px] h-11 px-2 rounded-full bg-blue text-white shadow-lg hover:bg-blue-dark transition-all uppercase tracking-tight whitespace-nowrap"
           >
@@ -158,7 +158,7 @@ const ProductItem = ({ item, priority = false }: { item: Product; priority?: boo
 
         {/* Title */}
         <h3 className="font-semibold text-[21px] text-dark leading-tight mb-2 line-clamp-2 min-h-[3rem]">
-          <Link href={`/shop-details?id=${item.id}`} onClick={() => handleProductDetails()} className="hover:text-blue transition-colors">
+          <Link href={`/seragamsekolah-details?id=${item.id}`} onClick={() => handleProductDetails()} className="hover:text-blue transition-colors">
             {item.title}
           </Link>
         </h3>

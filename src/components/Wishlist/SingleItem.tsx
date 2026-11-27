@@ -69,7 +69,7 @@ const SingleItem = ({ item }) => {
 
         <div className="flex items-center gap-4">
           <Link 
-            href={`/shop-details?id=${item.id}`} 
+            href={`/seragamsekolah-details?id=${item.id}`} 
             onClick={handleProductDetails}
             className="flex items-center justify-center rounded-[5px] bg-gray-2 w-17.5 h-17.5 overflow-hidden hover:opacity-80 transition-opacity"
           >
@@ -78,7 +78,7 @@ const SingleItem = ({ item }) => {
 
           <div>
             <h3 className="text-dark font-semibold ease-out duration-200 hover:text-blue leading-tight">
-              <Link href={`/shop-details?id=${item.id}`} onClick={handleProductDetails}> {item.title} </Link>
+              <Link href={`/seragamsekolah-details?id=${item.id}`} onClick={handleProductDetails}> {item.title} </Link>
             </h3>
           </div>
         </div>

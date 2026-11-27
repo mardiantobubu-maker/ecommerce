@@ -281,7 +281,7 @@ const AdminProducts = () => {
             fetch('/api/revalidate', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ path: '/shop-details' }),
+              body: JSON.stringify({ path: '/seragamsekolah-details' }),
             }),
             fetch('/api/revalidate', {
               method: 'POST',
@@ -399,7 +399,7 @@ const AdminProducts = () => {
             fetch('/api/revalidate', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ path: '/shop-details' }),
+              body: JSON.stringify({ path: '/seragamsekolah-details' }),
             }),
             fetch('/api/revalidate', {
               method: 'POST',

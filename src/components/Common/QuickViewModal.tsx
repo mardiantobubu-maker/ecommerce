@@ -291,7 +291,7 @@ const QuickViewModal = () => {
                         {reviews.length > 0 && (
                           <div className="mt-3 pt-3 border-t border-gray-2 text-center">
                             <Link 
-                              href={`/shop-details?id=${product.id}#reviews`} 
+                              href={`/seragamsekolah-details?id=${product.id}#reviews`} 
                               onClick={() => {
                                 closeModal();
                                 setIsReviewDropdownOpen(false);

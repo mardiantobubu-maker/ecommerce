@@ -20,7 +20,7 @@ export const menuData: Menu[] = [
     id: 7,
     title: "Blog",
     newTab: false,
-    path: "/blogs/blog-grid",
+    path: "/blogs/seragamsekolah",
     prefetch: false,
   },
 

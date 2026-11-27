@@ -11,14 +11,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ])
 
   const productUrls: MetadataRoute.Sitemap = (products || []).map((product) => ({
-    url: `${domain}/shop-details?id=${product.id}`,
+    url: `${domain}/seragamsekolah-details?id=${product.id}`,
     lastModified: product.created_at ? new Date(product.created_at) : new Date(),
     changeFrequency: 'weekly',
     priority: 0.8,
   }))
 
   const blogUrls: MetadataRoute.Sitemap = (blogs || [])
-    .filter((blog) => Boolean(blog.slug))
+    .filter((blog) => Boolean(blog.slug) && blog.slug !== 'seragamsekolah')
     .map((blog) => ({
       url: `${domain}/blogs/${encodeURIComponent(blog.slug)}`,
       lastModified: blog.created_at ? new Date(blog.created_at) : new Date(),
@@ -29,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = [
     { path: '', changeFrequency: 'daily' as const, priority: 1.0 },
     { path: '/seragamsekolah', changeFrequency: 'daily' as const, priority: 0.9 },
-    { path: '/blogs/blog-grid', changeFrequency: 'daily' as const, priority: 0.8 },
+    { path: '/blogs/seragamsekolah', changeFrequency: 'daily' as const, priority: 0.8 },
     { path: '/contact', changeFrequency: 'monthly' as const, priority: 0.6 },
     { path: '/faq', changeFrequency: 'monthly' as const, priority: 0.6 },
     { path: '/privacy-policy', changeFrequency: 'yearly' as const, priority: 0.4 },

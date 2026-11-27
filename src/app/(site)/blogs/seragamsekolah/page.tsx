@@ -1,13 +1,17 @@
 import React from "react";
 import BlogGrid from "@/components/BlogGrid";
+import { domain } from "@/lib/seo";
 
 import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Blog Seragam Sekolah | Tips & Panduan Lengkap",
   description: "Temukan berbagai tips memilih, merawat, dan panduan lengkap seputar seragam sekolah berkualitas untuk SD, SMP, dan SMA.",
+  alternates: {
+    canonical: `${domain}/blogs/seragamsekolah`,
+  },
 };
 
-const BlogGridPage = () => {
+const BlogSeragamSekolahPage = () => {
   return (
     <main>
       <React.Suspense fallback={null}>
@@ -17,4 +21,4 @@ const BlogGridPage = () => {
   );
 };
 
-export default BlogGridPage;
+export default BlogSeragamSekolahPage;

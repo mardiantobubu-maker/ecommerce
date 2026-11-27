@@ -56,7 +56,7 @@ const Categories = () => {
           {categories.map((cat) => (
             <Link 
               key={cat.name}
-              href={`/blogs/blog-grid?tag=${encodeURIComponent(cat.name)}`}
+              href={`/blogs/seragamsekolah?tag=${encodeURIComponent(cat.name)}`}
               className="group flex items-center justify-between ease-out duration-200 text-dark hover:text-blue"
             >
               {cat.name}

@@ -47,7 +47,7 @@ export function generateProductSchema(product: {
     sku: product.sku,
     offers: {
       "@type": "Offer",
-      url: `${domain}/shop-details${product.id ? `?id=${product.id}` : ""}`,
+      url: `${domain}/seragamsekolah-details${product.id ? `?id=${product.id}` : ""}`,
       priceCurrency: "IDR",
       price: product.price,
       priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],

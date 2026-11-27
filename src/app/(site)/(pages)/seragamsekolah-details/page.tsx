@@ -34,12 +34,12 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
       images: [product.image_url],
     },
     alternates: {
-      canonical: `${domain}/shop-details?id=${id}`,
+      canonical: `${domain}/seragamsekolah-details?id=${id}`,
     }
   };
 }
 
-const ShopDetailsPage = async ({ searchParams }: Props) => {
+const SeragamSekolahDetailsPage = async ({ searchParams }: Props) => {
   const { id } = await searchParams;
   let productSchema = null;
 
@@ -78,4 +78,4 @@ const ShopDetailsPage = async ({ searchParams }: Props) => {
   );
 };
 
-export default ShopDetailsPage;
+export default SeragamSekolahDetailsPage;

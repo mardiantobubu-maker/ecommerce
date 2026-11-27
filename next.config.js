@@ -38,6 +38,16 @@ const nextConfig = {
         destination: '/seragamsekolah',
         permanent: true,
       },
+      {
+        source: '/blogs/blog-grid',
+        destination: '/blogs/seragamsekolah',
+        permanent: true,
+      },
+      {
+        source: '/shop-details',
+        destination: '/seragamsekolah-details',
+        permanent: true,
+      },
     ];
   },
 };

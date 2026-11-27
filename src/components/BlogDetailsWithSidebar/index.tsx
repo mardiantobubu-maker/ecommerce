@@ -207,7 +207,7 @@ const BlogDetailsWithSidebar = ({ blog }: { blog: BlogItem }) => {
                       <li>
                         <Link
                           className="inline-flex hover:text-white border border-gray-3 bg-white py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                          href="/blogs/blog-grid?tag=Seragam SD"
+                          href="/blogs/seragamsekolah?tag=Seragam SD"
                         >
                           Seragam SD
                         </Link>
@@ -216,7 +216,7 @@ const BlogDetailsWithSidebar = ({ blog }: { blog: BlogItem }) => {
                       <li>
                         <Link
                           className="inline-flex hover:text-white border border-gray-3 bg-white py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                          href="/blogs/blog-grid?tag=Seragam SMP"
+                          href="/blogs/seragamsekolah?tag=Seragam SMP"
                         >
                           Seragam SMP
                         </Link>
@@ -225,7 +225,7 @@ const BlogDetailsWithSidebar = ({ blog }: { blog: BlogItem }) => {
                       <li>
                         <Link
                           className="inline-flex hover:text-white border border-gray-3 bg-white py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                          href="/blogs/blog-grid?tag=Seragam SMA"
+                          href="/blogs/seragamsekolah?tag=Seragam SMA"
                         >
                           Seragam SMA
                         </Link>
@@ -335,56 +335,56 @@ const BlogDetailsWithSidebar = ({ blog }: { blog: BlogItem }) => {
                   <div className="flex flex-wrap gap-3.5">
                     <Link
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                      href="/blogs/blog-grid?tag=Kemeja"
+                      href="/blogs/seragamsekolah?tag=Kemeja"
                     >
                       Kemeja
                     </Link>
 
                     <Link
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                      href="/blogs/blog-grid?tag=Celana"
+                      href="/blogs/seragamsekolah?tag=Celana"
                     >
                       Celana
                     </Link>
 
                     <Link
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                      href="/blogs/blog-grid?tag=Rok"
+                      href="/blogs/seragamsekolah?tag=Rok"
                     >
                       Rok
                     </Link>
 
                     <Link
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                      href="/blogs/blog-grid?tag=Dasi"
+                      href="/blogs/seragamsekolah?tag=Dasi"
                     >
                       Dasi
                     </Link>
 
                     <Link
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                      href="/blogs/blog-grid?tag=Topi"
+                      href="/blogs/seragamsekolah?tag=Topi"
                     >
                       Topi
                     </Link>
 
                     <Link
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                      href="/blogs/blog-grid?tag=Batik"
+                      href="/blogs/seragamsekolah?tag=Batik"
                     >
                       Batik
                     </Link>
 
                     <Link
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                      href="/blogs/blog-grid?tag=Pramuka"
+                      href="/blogs/seragamsekolah?tag=Pramuka"
                     >
                       Pramuka
                     </Link>
 
                     <Link
                       className="inline-flex hover:text-white border border-gray-3 py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                      href="/blogs/blog-grid?tag=Olahraga"
+                      href="/blogs/seragamsekolah?tag=Olahraga"
                     >
                       Olahraga
                     </Link>

@@ -268,7 +268,7 @@ const BlogDetails = ({ blog }: { blog: BlogItem }) => {
                   <li>
                     <Link
                       className="inline-flex hover:text-white border border-gray-3 bg-white py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                      href="/blogs/blog-grid?tag=Seragam SD"
+                      href="/blogs/seragamsekolah?tag=Seragam SD"
                     >
                       Seragam SD
                     </Link>
@@ -277,7 +277,7 @@ const BlogDetails = ({ blog }: { blog: BlogItem }) => {
                   <li>
                     <Link
                       className="inline-flex hover:text-white border border-gray-3 bg-white py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                      href="/blogs/blog-grid?tag=Seragam SMP"
+                      href="/blogs/seragamsekolah?tag=Seragam SMP"
                     >
                       Seragam SMP
                     </Link>
@@ -286,7 +286,7 @@ const BlogDetails = ({ blog }: { blog: BlogItem }) => {
                   <li>
                     <Link
                       className="inline-flex hover:text-white border border-gray-3 bg-white py-2 px-4 rounded-md ease-out duration-200 hover:bg-blue hover:border-blue"
-                      href="/blogs/blog-grid?tag=Seragam SMA"
+                      href="/blogs/seragamsekolah?tag=Seragam SMA"
                     >
                       Seragam SMA
                     </Link>

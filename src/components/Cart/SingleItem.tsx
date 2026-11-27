@@ -76,7 +76,7 @@ const SingleItem = ({ item }: { item: any }) => {
           {/* Title & Delete */}
           <div className="flex-1 pr-8">
             <h4 className="text-dark font-bold text-[16px] leading-tight line-clamp-2">
-              <Link href={`/shop-details?id=${item.id}`}>{item.title}</Link>
+              <Link href={`/seragamsekolah-details?id=${item.id}`}>{item.title}</Link>
             </h4>
             <div className="flex gap-2 mt-1">
               {(item.color || item.sleeve) && (
@@ -164,7 +164,7 @@ const SingleItem = ({ item }: { item: any }) => {
           </div>
           <div className="text-left">
             <h4 className="text-dark font-bold text-[16px] hover:text-blue transition-colors leading-snug">
-              <Link href={`/shop-details?id=${item.id}`}>{item.title}</Link>
+              <Link href={`/seragamsekolah-details?id=${item.id}`}>{item.title}</Link>
             </h4>
             <div className="flex gap-2 mt-1.5">
               {(item.color || item.sleeve) && (

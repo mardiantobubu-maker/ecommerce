@@ -60,7 +60,7 @@ const SingleListItem = ({ item, priority = false }: { item: Product; priority?: 
       <div className="flex flex-col sm:flex-row">
         <div className="shadow-list relative flex items-center justify-center sm:max-w-[270px] w-full sm:min-h-[270px] p-4 bg-white rounded-l-[10px]">
           <Link
-            href={`/shop-details?id=${item.id}`}
+            href={`/seragamsekolah-details?id=${item.id}`}
             onClick={handleProductDetails}
             className="w-full h-full flex items-center justify-center"
           >
@@ -94,7 +94,7 @@ const SingleListItem = ({ item, priority = false }: { item: Product; priority?: 
 
             {/* Pilih Ukuran Button */}
             <Link
-              href={`/shop-details?id=${item.id}`}
+              href={`/seragamsekolah-details?id=${item.id}`}
               onClick={handleProductDetails}
               className="flex-1 inline-flex justify-center items-center font-extrabold text-[12px] h-11 px-2 rounded-full bg-blue text-white shadow-lg hover:bg-blue-dark transition-all uppercase tracking-tight whitespace-nowrap"
             >
@@ -121,7 +121,7 @@ const SingleListItem = ({ item, priority = false }: { item: Product; priority?: 
         <div className="w-full flex flex-col gap-5 sm:flex-row sm:items-center justify-center sm:justify-between py-5 px-4 sm:px-7.5 lg:pl-11 lg:pr-12">
           <div>
             <h3 className="font-semibold text-[21px] text-dark ease-out duration-200 hover:text-blue mb-2">
-              <Link href={`/shop-details?id=${item.id}`} onClick={handleProductDetails}> {item.title} </Link>
+              <Link href={`/seragamsekolah-details?id=${item.id}`} onClick={handleProductDetails}> {item.title} </Link>
             </h3>
 
             <div className="flex flex-col gap-1 mb-3">
