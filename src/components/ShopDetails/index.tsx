@@ -765,8 +765,8 @@ const ShopDetails = ({ initialProduct = null }: { initialProduct?: any }) => {
             </div>
 
             {/* Right: Info Section */}
-            <div className="w-full lg:w-1/2">
-              <div className="bg-white p-6 sm:p-10 lg:pb-0 rounded-2xl shadow-xl border border-gray-3 space-y-8 lg:h-full animate-fadeIn overflow-hidden flex flex-col justify-between">
+            <div className="w-full lg:w-1/2 lg:flex lg:flex-col">
+              <div className="bg-white p-6 sm:p-10 lg:pb-0 rounded-2xl shadow-xl border border-gray-3 space-y-8 lg:flex-1 animate-fadeIn overflow-hidden flex flex-col justify-between">
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
                     <div className="inline-flex items-center px-3 py-1.5 bg-green text-white text-[10px] font-black uppercase tracking-widest rounded-md shadow-sm">
