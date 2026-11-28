@@ -37,6 +37,14 @@ export function generateProductSchema(product: {
   price: number | string;
   sku: string;
   inStock: boolean;
+  ratingValue?: number;
+  reviewCount?: number;
+  reviews?: Array<{
+    author: string;
+    rating: number;
+    comment: string;
+    datePublished?: string;
+  }>;
 }) {
   const now = new Date();
   const validFrom = now.toISOString().split("T")[0];
@@ -48,7 +56,7 @@ export function generateProductSchema(product: {
     ? product.image
     : `${domain}${product.image?.startsWith("/") ? "" : "/"}${product.image || ""}`;
 
-  return {
+  const schema: Record<string, any> = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
@@ -110,4 +118,34 @@ export function generateProductSchema(product: {
       },
     }
   };
+
+  if (product.reviewCount && product.reviewCount > 0 && product.ratingValue && product.ratingValue > 0) {
+    schema.aggregateRating = {
+      "@type": "AggregateRating",
+      ratingValue: product.ratingValue,
+      reviewCount: product.reviewCount,
+      bestRating: 5,
+      worstRating: 1,
+    };
+  }
+
+  if (product.reviews && product.reviews.length > 0) {
+    schema.review = product.reviews.map((rev) => ({
+      "@type": "Review",
+      author: {
+        "@type": "Person",
+        name: rev.author,
+      },
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: rev.rating,
+        bestRating: 5,
+        worstRating: 1,
+      },
+      reviewBody: rev.comment,
+      ...(rev.datePublished ? { datePublished: rev.datePublished } : {}),
+    }));
+  }
+
+  return schema;
 }

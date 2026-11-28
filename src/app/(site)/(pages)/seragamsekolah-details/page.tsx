@@ -49,14 +49,36 @@ const SeragamSekolahDetailsPage = async ({ searchParams }: Props) => {
     const normalizedId = Number(id);
     const lookupId = Number.isNaN(normalizedId) ? id : normalizedId;
 
-    const { data: product } = await supabase
-      .from('products')
-      .select('*')
-      .eq('id', lookupId)
-      .maybeSingle();
+    const [{ data: product }, { data: testimonialsData }] = await Promise.all([
+      supabase
+        .from('products')
+        .select('*')
+        .eq('id', lookupId)
+        .maybeSingle(),
+      supabase
+        .from('testimonials')
+        .select('name, rating, comment, created_at')
+        .eq('product_id', lookupId)
+        .order('created_at', { ascending: false })
+        .limit(10),
+    ]);
 
     if (product) {
       initialProduct = normalizeProduct(product);
+      const formattedReviews = (testimonialsData || [])
+        .filter((r: any) => r.name && r.rating > 0 && r.comment)
+        .map((r: any) => ({
+          author: r.name,
+          rating: Number(r.rating),
+          comment: r.comment,
+          datePublished: r.created_at ? new Date(r.created_at).toISOString().split('T')[0] : undefined,
+        }));
+
+      const reviewCount = formattedReviews.length > 0 ? formattedReviews.length : Number(product.reviews || 0);
+      const ratingValue = formattedReviews.length > 0
+        ? Number((formattedReviews.reduce((sum: number, r: any) => sum + r.rating, 0) / formattedReviews.length).toFixed(1))
+        : Number(product.rating || 0);
+
       productSchema = generateProductSchema({
         id: product.id,
         name: product.title,
@@ -65,6 +87,9 @@ const SeragamSekolahDetailsPage = async ({ searchParams }: Props) => {
         price: product.price || product.price_panjang || 0,
         sku: `SRG-${product.id}`,
         inStock: (product.stock || 0) > 0,
+        ratingValue,
+        reviewCount,
+        reviews: formattedReviews,
       });
     }
   }
