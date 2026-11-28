@@ -1,8 +1,14 @@
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "../css/style.css";
 import ClientLayoutWrapper from "@/components/Common/ClientLayoutWrapper";
 import { domain } from "@/lib/seo";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 const euclid = localFont({
   src: [
@@ -89,7 +95,7 @@ export default async function RootLayout({
 
       </head>
 
-      <body suppressHydrationWarning={true} className="font-euclid-circular-a w-full relative">
+      <body suppressHydrationWarning={true} className="font-euclid-circular-a w-full">
         <ClientLayoutWrapper initialCategories={categories || []}>{children}</ClientLayoutWrapper>
         <SpeedInsights />
       </body>
