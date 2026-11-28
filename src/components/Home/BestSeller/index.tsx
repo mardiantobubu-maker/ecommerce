@@ -12,6 +12,9 @@ const BestSeller = ({ initialBestSellers }: { initialBestSellers?: Product[] }) 
   const [loading, setLoading] = useState(!initialBestSellers || initialBestSellers.length === 0);
 
   useEffect(() => {
+    // Skip redundant client-side fetch & realtime channel when SSR already provided products
+    if (initialBestSellers && initialBestSellers.length > 0) return;
+
     let isMounted = true;
 
     const fetchProductsSafe = async () => {

@@ -1,5 +1,4 @@
 "use client";
-import { Swiper, SwiperSlide } from "swiper/react";
 import { useCallback, useRef, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";

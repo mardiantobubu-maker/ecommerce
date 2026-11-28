@@ -7,10 +7,13 @@ import { Product } from "@/types/product";
 import Link from "next/link";
 
 const NewArrival = ({ initialNewArrivals }: { initialNewArrivals?: Product[] }) => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>(initialNewArrivals || []);
+  const [loading, setLoading] = useState(!initialNewArrivals || initialNewArrivals.length === 0);
 
   useEffect(() => {
+    // Skip redundant client-side fetch & realtime channel when SSR already provided products
+    if (initialNewArrivals && initialNewArrivals.length > 0) return;
+
     let isMounted = true;
 
     const fetchProductsSafe = async () => {
