@@ -38,25 +38,76 @@ export function generateProductSchema(product: {
   sku: string;
   inStock: boolean;
 }) {
+  const now = new Date();
+  const validFrom = now.toISOString().split("T")[0];
+  const validUntilDate = new Date(now);
+  validUntilDate.setFullYear(validUntilDate.getFullYear() + 1);
+  const priceValidUntil = validUntilDate.toISOString().split("T")[0];
+
+  const imageUrl = product.image?.startsWith("http")
+    ? product.image
+    : `${domain}${product.image?.startsWith("/") ? "" : "/"}${product.image || ""}`;
+
   return {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
-    image: product.image,
+    image: imageUrl,
     description: product.description,
     sku: product.sku,
+    mpn: product.sku,
+    brand: {
+      "@type": "Brand",
+      name: "Seragam Grosir",
+    },
     offers: {
       "@type": "Offer",
       url: `${domain}/seragamsekolah-details${product.id ? `?id=${product.id}` : ""}`,
       priceCurrency: "IDR",
       price: product.price,
-      priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+      validFrom,
+      priceValidUntil,
       itemCondition: "https://schema.org/NewCondition",
       availability: product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       seller: {
         "@type": "Organization",
-        name: "Toko Seragam Sekolah"
-      }
+        name: "Seragam Grosir"
+      },
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "ID",
+        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+        merchantReturnDays: 7,
+        returnMethod: "https://schema.org/ReturnByMail",
+        returnFees: "https://schema.org/ReturnFeesCustomerResponsibility",
+      },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: {
+          "@type": "MonetaryAmount",
+          value: 0,
+          currency: "IDR",
+        },
+        shippingDestination: {
+          "@type": "DefinedRegion",
+          addressCountry: "ID",
+        },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          handlingTime: {
+            "@type": "QuantitativeValue",
+            minValue: 1,
+            maxValue: 2,
+            unitCode: "DAY",
+          },
+          transitTime: {
+            "@type": "QuantitativeValue",
+            minValue: 1,
+            maxValue: 5,
+            unitCode: "DAY",
+          },
+        },
+      },
     }
   };
 }
