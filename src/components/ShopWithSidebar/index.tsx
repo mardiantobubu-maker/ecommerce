@@ -528,9 +528,9 @@ const ShopWithSidebar = ({ initialProducts }: { initialProducts?: any[] }) => {
                 ) : paginatedProducts.length > 0 ? (
                   paginatedProducts.map((item, key) =>
                     productStyle === "grid" ? (
-                      <SingleGridItem item={item} key={key} priority={key < 3} />
+                      <SingleGridItem item={item} key={key} />
                     ) : (
-                      <SingleListItem item={item} key={key} priority={key < 3} />
+                      <SingleListItem item={item} key={key} />
                     )
                   )
                 ) : (
