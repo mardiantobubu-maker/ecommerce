@@ -567,6 +567,32 @@ const ShopDetails = ({ initialProduct = null }: { initialProduct?: any }) => {
     />
   );
 
+  const wholesaleOffersNode = (
+    <div className="p-6 sm:p-10 bg-blue/5">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2 bg-blue/20 rounded-lg text-blue">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
+        </div>
+        <span className="font-black text-blue text-sm tracking-tight uppercase">Penawaran Grosir Sekolah</span>
+      </div>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {getDiscountTiers().map((tier, idx) => (
+          <li key={idx} className="bg-white p-5 rounded-xl border border-blue/10 shadow-sm flex flex-col items-center text-center hover:border-blue/30 transition-all">
+            <span className="text-[10px] font-bold opacity-60 mb-1">Minimal</span>
+            <span className="text-2xl font-black">
+              {tier.label.includes("→") ? tier.label.split("→")[0].trim() : tier.label}
+            </span>
+            {tier.label.includes("→") && (
+              <span className="text-sm font-bold text-blue">
+                {tier.label.split("→")[1].trim()} OFF
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+
   return (
     <>
       <Breadcrumb title={"Detail Produk"} pages={["detail produk"]} headingAs="p" />
@@ -633,7 +659,7 @@ const ShopDetails = ({ initialProduct = null }: { initialProduct?: any }) => {
 
             {/* Right: Info Section */}
             <div className="w-full lg:w-1/2">
-              <div className="bg-white p-6 sm:p-10 pb-0 sm:pb-0 rounded-2xl shadow-xl border border-gray-3 space-y-8 h-full animate-fadeIn overflow-hidden flex flex-col justify-between">
+              <div className="bg-white p-6 sm:p-10 lg:pb-0 rounded-2xl shadow-xl border border-gray-3 space-y-8 lg:h-full animate-fadeIn overflow-hidden flex flex-col justify-between">
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
                     <div className="inline-flex items-center px-3 py-1.5 bg-green text-white text-[10px] font-black uppercase tracking-widest rounded-md shadow-sm">
@@ -877,38 +903,22 @@ const ShopDetails = ({ initialProduct = null }: { initialProduct?: any }) => {
                         </button>
                       </div>
                     </div>
-
-                    {/* Mobile Only: Kombinasi Ukuran & Warna right below Bagikan Ke */}
-                    <div className="lg:hidden mt-6 bg-white p-5 rounded-2xl shadow-lg border border-gray-3 overflow-hidden">
-                      {kodiMatrixNode}
-                    </div>
-
-                    </div>
-                  {/* Wholesale Offers - Flush at Bottom */}
-                  <div className="-mx-6 sm:-mx-10 p-6 sm:p-10 bg-blue/5 border-t border-blue/10">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="p-2 bg-blue/20 rounded-lg text-blue">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
-                      </div>
-                      <span className="font-black text-blue text-sm tracking-tight uppercase">Penawaran Grosir Sekolah</span>
-                    </div>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {getDiscountTiers().map((tier, idx) => (
-                        <li key={idx} className="bg-white p-5 rounded-xl border border-blue/10 shadow-sm flex flex-col items-center text-center hover:border-blue/30 transition-all">
-                          <span className="text-[10px] font-bold opacity-60 mb-1">Minimal</span>
-                          <span className="text-2xl font-black">
-                            {tier.label.includes("→") ? tier.label.split("→")[0].trim() : tier.label}
-                          </span>
-                          {tier.label.includes("→") && (
-                            <span className="text-sm font-bold text-blue">
-                              {tier.label.split("→")[1].trim()} OFF
-                            </span>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
                   </div>
                 </div>
+                  {/* Wholesale Offers - Flush at Bottom (Desktop Only) */}
+                  <div className="hidden lg:block -mx-6 sm:-mx-10 border-t border-blue/10">
+                    {wholesaleOffersNode}
+                  </div>
+                </div>
+
+              {/* Mobile Only: Separate card for Kombinasi Ukuran & Warna directly below Bagikan Ke */}
+              <div className="lg:hidden mt-6 bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-gray-3 animate-fadeIn overflow-hidden">
+                {kodiMatrixNode}
+              </div>
+
+              {/* Mobile Only: Separate card for Penawaran Grosir Sekolah */}
+              <div className="lg:hidden mt-6 rounded-2xl shadow-xl border border-blue/10 overflow-hidden">
+                {wholesaleOffersNode}
               </div>
             </div>
 
