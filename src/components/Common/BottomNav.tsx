@@ -72,10 +72,9 @@ const BottomNav = () => {
 
   return (
     <div
-      className="xl:hidden fixed bottom-0 left-0 z-[999] w-full bg-white pb-4 pt-2 px-2 border-t border-gray-2 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]"
-      style={{ transform: "translateZ(0)", WebkitTransform: "translateZ(0)" }}
+      className="xl:hidden fixed bottom-0 left-0 right-0 z-[999] w-full bg-white pt-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] px-2 border-t border-gray-2 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]"
     >
-      <ul className="flex items-center justify-between pb-2">
+      <ul className="flex items-center justify-between">
         {navItems.map((item, idx) => {
           const currentTab = searchParams.get("tab");
           const isActive = item.href.includes("tab=")
