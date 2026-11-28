@@ -1011,7 +1011,6 @@ const ShopDetails = ({ initialProduct = null }: { initialProduct?: any }) => {
                       </div>
                     </div>
                   </div>
-                </div>
                   {/* Wholesale Offers - Flush at Bottom (Desktop Only) */}
                   <div className="hidden lg:block -mx-6 sm:-mx-10 border-t border-blue/10">
                     {wholesaleOffersNode}
@@ -1033,6 +1032,7 @@ const ShopDetails = ({ initialProduct = null }: { initialProduct?: any }) => {
                 {wholesaleOffersNode}
               </div>
             </div>
+          </div>
 
           {/* Grid: Kodi Matrix (Left) + Summary & CTA (Right) - Desktop Only */}
           <div className="hidden lg:grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8 lg:mt-12 items-start">
