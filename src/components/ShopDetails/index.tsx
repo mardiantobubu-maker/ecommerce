@@ -528,6 +528,45 @@ const ShopDetails = ({ initialProduct = null }: { initialProduct?: any }) => {
     ? Number((reviews.reduce((sum, rev) => sum + Number(rev.rating || 0), 0) / reviews.length).toFixed(1))
     : (product?.rating || 0);
 
+  const kodiMatrixNode = (
+    <KodiSizeMatrix
+      sizes={Array.isArray((product as any).sizes) ? (product as any).sizes : (typeof (product as any).sizes === "string" ? (product as any).sizes.split(/[;,]/).map((s: string) => s.trim()).filter(Boolean) : ["7,8", "9,10", "11,12", "13,14", "15,16", "17,18", "19,20"])}
+      colors={(() => {
+        const dbColors = Array.isArray((product as any).colors) ? (product as any).colors : (typeof (product as any).colors === "string" ? (product as any).colors.split(/[;,]/).map((s: string) => s.trim()).filter(Boolean) : ["Putih"]);
+        const dbSleeves = Array.isArray((product as any).sleeves) ? (product as any).sleeves : (typeof (product as any).sleeves === "string" ? (product as any).sleeves.split(/[;,]/).map((s: string) => s.trim()).filter(Boolean) : ["Pendek", "Panjang"]);
+        const variants: ColorVariant[] = [];
+        dbColors.forEach(c => {
+          dbSleeves.forEach(s => {
+            const colorLower = c.toLowerCase();
+            const sleeveLower = s.toLowerCase();
+            let isAllowed = true;
+
+            if ((colorLower === "putih" || colorLower === "merah") && (sleeveLower === "smp" || sleeveLower === "sma" || sleeveLower === "smk" || sleeveLower === "pramuka")) isAllowed = false;
+            if (colorLower === "biru" && (sleeveLower === "sd" || sleeveLower === "sma" || sleeveLower === "smk" || sleeveLower === "pramuka")) isAllowed = false;
+            if (colorLower === "abu-abu" && (sleeveLower === "sd" || sleeveLower === "smp" || sleeveLower === "smk" || sleeveLower === "pramuka")) isAllowed = false;
+            if (colorLower === "cokelat" && (sleeveLower === "sd" || sleeveLower === "smp" || sleeveLower === "sma" || sleeveLower === "smk")) isAllowed = false;
+            if (sleeveLower === "pramuka" && colorLower !== "cokelat") isAllowed = false;
+
+            if (isAllowed) {
+              variants.push({ label: `${c} ${s}`, value: c.toLowerCase(), type: s });
+            }
+          });
+        });
+        return variants;
+      })()}
+      unitPrice={currentUnitPrice}
+      unitPricePendek={product.discountedPrice || product.price}
+      unitPricePanjang={(product as any).discountedPriceLong || (product as any).priceLong || product.price}
+      sizePrices={(product as any).size_prices || {}}
+      selectedSize={selectedSize}
+      setSelectedSize={setSelectedSize}
+      activeSleeve={type}
+      setSleeveType={setType}
+      values={variantBreakdown}
+      onChange={(key, val) => setVariantBreakdown((prev) => ({ ...prev, [key]: val }))}
+    />
+  );
+
   return (
     <>
       <Breadcrumb title={"Detail Produk"} pages={["detail produk"]} headingAs="p" />
@@ -839,6 +878,11 @@ const ShopDetails = ({ initialProduct = null }: { initialProduct?: any }) => {
                       </div>
                     </div>
 
+                    {/* Mobile Only: Kombinasi Ukuran & Warna right below Bagikan Ke */}
+                    <div className="lg:hidden mt-6 bg-white p-5 rounded-2xl shadow-lg border border-gray-3 overflow-hidden">
+                      {kodiMatrixNode}
+                    </div>
+
                     </div>
                   {/* Wholesale Offers - Flush at Bottom */}
                   <div className="-mx-6 sm:-mx-10 p-6 sm:p-10 bg-blue/5 border-t border-blue/10">
@@ -870,44 +914,9 @@ const ShopDetails = ({ initialProduct = null }: { initialProduct?: any }) => {
 
           {/* Grid: Kodi Matrix (Left) + Wholesale Offers (Right) - Full Width Row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8 lg:mt-12 items-start">
-            {/* Column 1: Kodi Configuration (Size Matrix) */}
-            <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-gray-3 animate-fadeIn overflow-hidden">
-              <KodiSizeMatrix
-                sizes={Array.isArray((product as any).sizes) ? (product as any).sizes : (typeof (product as any).sizes === "string" ? (product as any).sizes.split(/[;,]/).map((s: string) => s.trim()).filter(Boolean) : ["7,8", "9,10", "11,12", "13,14", "15,16", "17,18", "19,20"])}
-                colors={(() => {
-                  const dbColors = Array.isArray((product as any).colors) ? (product as any).colors : (typeof (product as any).colors === "string" ? (product as any).colors.split(/[;,]/).map((s: string) => s.trim()).filter(Boolean) : ["Putih"]);
-                  const dbSleeves = Array.isArray((product as any).sleeves) ? (product as any).sleeves : (typeof (product as any).sleeves === "string" ? (product as any).sleeves.split(/[;,]/).map((s: string) => s.trim()).filter(Boolean) : ["Pendek", "Panjang"]);
-                  const variants: ColorVariant[] = [];
-                  dbColors.forEach(c => {
-                    dbSleeves.forEach(s => {
-                      const colorLower = c.toLowerCase();
-                      const sleeveLower = s.toLowerCase();
-                      let isAllowed = true;
-
-                      if ((colorLower === "putih" || colorLower === "merah") && (sleeveLower === "smp" || sleeveLower === "sma" || sleeveLower === "smk" || sleeveLower === "pramuka")) isAllowed = false;
-                      if (colorLower === "biru" && (sleeveLower === "sd" || sleeveLower === "sma" || sleeveLower === "smk" || sleeveLower === "pramuka")) isAllowed = false;
-                      if (colorLower === "abu-abu" && (sleeveLower === "sd" || sleeveLower === "smp" || sleeveLower === "smk" || sleeveLower === "pramuka")) isAllowed = false;
-                      if (colorLower === "cokelat" && (sleeveLower === "sd" || sleeveLower === "smp" || sleeveLower === "sma" || sleeveLower === "smk")) isAllowed = false;
-                      if (sleeveLower === "pramuka" && colorLower !== "cokelat") isAllowed = false;
-
-                      if (isAllowed) {
-                        variants.push({ label: `${c} ${s}`, value: c.toLowerCase(), type: s });
-                      }
-                    });
-                  });
-                  return variants;
-                })()}
-                unitPrice={currentUnitPrice}
-                unitPricePendek={product.discountedPrice || product.price}
-                unitPricePanjang={(product as any).discountedPriceLong || (product as any).priceLong || product.price}
-                sizePrices={(product as any).size_prices || {}}
-                selectedSize={selectedSize}
-                setSelectedSize={setSelectedSize}
-                activeSleeve={type}
-                setSleeveType={setType}
-                values={variantBreakdown}
-                onChange={(key, val) => setVariantBreakdown((prev) => ({ ...prev, [key]: val }))}
-              />
+            {/* Column 1: Kodi Configuration (Size Matrix) - Desktop Only */}
+            <div className="hidden lg:block bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-gray-3 animate-fadeIn overflow-hidden">
+              {kodiMatrixNode}
             </div>
 
             {/* Column 2: Wholesale Offers Card + CTA Buttons */}
