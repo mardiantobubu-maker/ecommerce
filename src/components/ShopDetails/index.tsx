@@ -593,6 +593,113 @@ const ShopDetails = ({ initialProduct = null }: { initialProduct?: any }) => {
     </div>
   );
 
+  const kodiSummaryCardNode = (
+    <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-gray-3 animate-fadeIn flex flex-col justify-between min-h-full overflow-hidden">
+      <div className="space-y-8">
+        {/* Kodi Summary Panel & CTA Buttons (Visible only when quantity > 0) */}
+        {totalPcs > 0 ? (
+          <div className="space-y-8 animate-fadeIn">
+            <div className="-mx-6 -mt-6 p-6 bg-blue/5 rounded-b-2xl rounded-t-none sm:rounded-2xl border-b border-blue/10 sm:border border-x-0 sm:border-x border-t-0 sm:border-t sm:mx-0 sm:mt-0 shadow-inner">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[14px] font-black text-dark">Total Unit Terpilih</span>
+                <span className={`text-3xl font-black ${isKodiValid ? 'text-green' : 'text-dark'}`}>{totalPcs.toLocaleString("id-ID")} Unit</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[14px] font-black text-dark">Validasi Kodian</span>
+                <span className={`text-sm font-black px-4 py-2 rounded-full ${isKodiValid ? 'bg-green/10 text-green' : 'bg-orange/10 text-orange'}`}>
+                  {isKodiValid ? `✓ ${(totalPcs / 20).toLocaleString("id-ID")} Kodi Siap` : `Min. 1 Kodi (Sisa ${(totalPcs % 20).toLocaleString("id-ID")} Unit)`}
+                </span>
+              </div>
+              <div className="flex flex-col pt-4 border-t border-blue/10 mt-4 gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[14px] font-black text-dark">Estimasi Harga</span>
+                  <span className={`text-2xl font-black ${isKodiValid ? 'text-blue' : 'text-dark-4 opacity-50'}`}>
+                    {(() => {
+                      const totalVal = Object.entries(variantBreakdown).reduce((total, [key, val]) => {
+                        const [size, ...colorParts] = key.split("-");
+                        const colorLabel = colorParts.join("-");
+                        const isPanjang = colorLabel.toLowerCase().includes("panjang");
+                        const customPrice = (product as any).size_prices?.[size]?.[isPanjang ? 'panjang' : 'pendek'];
+
+                        const upPendek = product.discountedPrice || product.price || 0;
+                        const upPanjang = (product as any).discountedPriceLong || (product as any).priceLong || upPendek;
+
+                        const activePrice = customPrice ? customPrice : (isPanjang ? upPanjang : upPendek);
+                        return total + (activePrice * val);
+                      }, 0);
+
+                      const totalKodi = pcsToKodi(totalPcs);
+                      const volumeDiscount = getKodiDiscount(totalKodi);
+                      const finalPrice = volumeDiscount ? totalVal * (1 - volumeDiscount.discount) : totalVal;
+
+                      return formatRupiah(finalPrice);
+                    })()}
+                  </span>
+                </div>
+                {(() => {
+                  const totalKodi = pcsToKodi(totalPcs);
+                  const volumeDiscount = getKodiDiscount(totalKodi);
+                  if (volumeDiscount && isKodiValid) {
+                    const originalTotal = Object.entries(variantBreakdown).reduce((total, [key, val]) => {
+                      const [size, ...colorParts] = key.split("-");
+                      const colorLabel = colorParts.join("-");
+                      const isPanjang = colorLabel.toLowerCase().includes("panjang");
+                      const customPrice = (product as any).size_prices?.[size]?.[isPanjang ? 'panjang' : 'pendek'];
+                      const upPendek = product.discountedPrice || product.price || 0;
+                      const upPanjang = (product as any).discountedPriceLong || (product as any).priceLong || upPendek;
+                      const activePrice = customPrice ? customPrice : (isPanjang ? upPanjang : upPendek);
+                      return total + (activePrice * val);
+                    }, 0);
+
+                    return (
+                      <div className="flex flex-col items-end gap-1">
+                        <span className="text-sm text-dark-4 line-through opacity-60">
+                          {formatRupiah(originalTotal)}
+                        </span>
+                        <span className="px-3 py-1 rounded-md bg-orange/10 text-orange text-[10px] font-black uppercase tracking-widest">
+                          Potongan {volumeDiscount.label.split("→")[1].trim()}
+                        </span>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
+              </div>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-2">
+              <button
+                onClick={handleAddToCart}
+                disabled={!isKodiValid}
+                className={`w-full sm:flex-1 h-16 rounded-full font-black text-sm uppercase tracking-widest transition-all border-2 ${isKodiValid ? 'border-blue text-blue bg-white hover:bg-blue hover:text-white hover:scale-[1.02] shadow-md' : 'border-gray-2 text-gray-3 bg-white cursor-not-allowed'}`}
+              >
+                TAMBAH KERANJANG
+              </button>
+              <button
+                onClick={handleBuyNow}
+                disabled={!isKodiValid}
+                className={`w-full sm:flex-1 h-16 rounded-full font-black text-sm uppercase tracking-widest transition-all ${isKodiValid ? 'bg-blue text-white hover:bg-blue-dark hover:scale-[1.02] shadow-lg' : 'bg-gray-1 text-gray-3 cursor-not-allowed'}`}
+              >
+                BELI SEKARANG
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="p-10 border-2 border-dashed border-gray-2 rounded-2xl flex flex-col items-center justify-center text-center space-y-4">
+            <div className="w-16 h-16 bg-gray-1 rounded-full flex items-center justify-center text-gray-3">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
+            </div>
+            <div>
+              <p className="font-bold text-[21px] text-[#212121]">Silakan Pilih Kuantitas</p>
+              <p className="text-base text-[#212121]">Isi rincian ukuran di samping untuk memunculkan ringkasan pesanan.</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <>
       <Breadcrumb title={"Detail Produk"} pages={["detail produk"]} headingAs="p" />
@@ -916,125 +1023,26 @@ const ShopDetails = ({ initialProduct = null }: { initialProduct?: any }) => {
                 {kodiMatrixNode}
               </div>
 
+              {/* Mobile Only: Separate card for Kodi Summary & CTA above Penawaran Grosir Sekolah */}
+              <div className="lg:hidden mt-6">
+                {kodiSummaryCardNode}
+              </div>
+
               {/* Mobile Only: Separate card for Penawaran Grosir Sekolah */}
               <div className="lg:hidden mt-6 rounded-2xl shadow-xl border border-blue/10 overflow-hidden">
                 {wholesaleOffersNode}
               </div>
             </div>
 
-          {/* Grid: Kodi Matrix (Left) + Wholesale Offers (Right) - Full Width Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8 lg:mt-12 items-start">
-            {/* Column 1: Kodi Configuration (Size Matrix) - Desktop Only */}
-            <div className="hidden lg:block bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-gray-3 animate-fadeIn overflow-hidden">
+          {/* Grid: Kodi Matrix (Left) + Summary & CTA (Right) - Desktop Only */}
+          <div className="hidden lg:grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8 lg:mt-12 items-start">
+            {/* Column 1: Kodi Configuration (Size Matrix) */}
+            <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-gray-3 animate-fadeIn overflow-hidden">
               {kodiMatrixNode}
             </div>
 
-            {/* Column 2: Wholesale Offers Card + CTA Buttons */}
-            <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-gray-3 animate-fadeIn flex flex-col justify-between min-h-full overflow-hidden">
-              <div className="space-y-8">
-
-                {/* Kodi Summary Panel & CTA Buttons (Visible only when quantity > 0) */}
-                {totalPcs > 0 ? (
-                  <div className="space-y-8 animate-fadeIn">
-                    <div className="-mx-6 -mt-6 p-6 bg-blue/5 rounded-b-2xl rounded-t-none sm:rounded-2xl border-b border-blue/10 sm:border border-x-0 sm:border-x border-t-0 sm:border-t sm:mx-0 sm:mt-0 shadow-inner">
-                      <div className="flex items-center justify-between mb-4">
-                        <span className="text-[14px] font-black text-dark">Total Unit Terpilih</span>
-                        <span className={`text-3xl font-black ${isKodiValid ? 'text-green' : 'text-dark'}`}>{totalPcs.toLocaleString("id-ID")} Unit</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[14px] font-black text-dark">Validasi Kodian</span>
-                        <span className={`text-sm font-black px-4 py-2 rounded-full ${isKodiValid ? 'bg-green/10 text-green' : 'bg-orange/10 text-orange'}`}>
-                          {isKodiValid ? `✓ ${(totalPcs / 20).toLocaleString("id-ID")} Kodi Siap` : `Min. 1 Kodi (Sisa ${(totalPcs % 20).toLocaleString("id-ID")} Unit)`}
-                        </span>
-                      </div>
-                      <div className="flex flex-col pt-4 border-t border-blue/10 mt-4 gap-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[14px] font-black text-dark">Estimasi Harga</span>
-                          <span className={`text-2xl font-black ${isKodiValid ? 'text-blue' : 'text-dark-4 opacity-50'}`}>
-                            {(() => {
-                              const totalVal = Object.entries(variantBreakdown).reduce((total, [key, val]) => {
-                                const [size, ...colorParts] = key.split("-");
-                                const colorLabel = colorParts.join("-");
-                                const isPanjang = colorLabel.toLowerCase().includes("panjang");
-                                const customPrice = (product as any).size_prices?.[size]?.[isPanjang ? 'panjang' : 'pendek'];
-
-                                const upPendek = product.discountedPrice || product.price || 0;
-                                const upPanjang = (product as any).discountedPriceLong || (product as any).priceLong || upPendek;
-
-                                const activePrice = customPrice ? customPrice : (isPanjang ? upPanjang : upPendek);
-                                return total + (activePrice * val);
-                              }, 0);
-
-                              const totalKodi = pcsToKodi(totalPcs);
-                              const volumeDiscount = getKodiDiscount(totalKodi);
-                              const finalPrice = volumeDiscount ? totalVal * (1 - volumeDiscount.discount) : totalVal;
-
-                              return formatRupiah(finalPrice);
-                            })()}
-                          </span>
-                        </div>
-                        {(() => {
-                          const totalKodi = pcsToKodi(totalPcs);
-                          const volumeDiscount = getKodiDiscount(totalKodi);
-                          if (volumeDiscount && isKodiValid) {
-                            const originalTotal = Object.entries(variantBreakdown).reduce((total, [key, val]) => {
-                              const [size, ...colorParts] = key.split("-");
-                              const colorLabel = colorParts.join("-");
-                              const isPanjang = colorLabel.toLowerCase().includes("panjang");
-                              const customPrice = (product as any).size_prices?.[size]?.[isPanjang ? 'panjang' : 'pendek'];
-                              const upPendek = product.discountedPrice || product.price || 0;
-                              const upPanjang = (product as any).discountedPriceLong || (product as any).priceLong || upPendek;
-                              const activePrice = customPrice ? customPrice : (isPanjang ? upPanjang : upPendek);
-                              return total + (activePrice * val);
-                            }, 0);
-
-                            return (
-                              <div className="flex flex-col items-end gap-1">
-                                <span className="text-sm text-dark-4 line-through opacity-60">
-                                  {formatRupiah(originalTotal)}
-                                </span>
-                                <span className="px-3 py-1 rounded-md bg-orange/10 text-orange text-[10px] font-black uppercase tracking-widest">
-                                  Potongan {volumeDiscount.label.split("→")[1].trim()}
-                                </span>
-                              </div>
-                            );
-                          }
-                          return null;
-                        })()}
-                      </div>
-                    </div>
-
-                    {/* CTA Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-2">
-                      <button
-                        onClick={handleAddToCart}
-                        disabled={!isKodiValid}
-                        className={`w-full sm:flex-1 h-16 rounded-full font-black text-sm uppercase tracking-widest transition-all border-2 ${isKodiValid ? 'border-blue text-blue bg-white hover:bg-blue hover:text-white hover:scale-[1.02] shadow-md' : 'border-gray-2 text-gray-3 bg-white cursor-not-allowed'}`}
-                      >
-                        TAMBAH KERANJANG
-                      </button>
-                      <button
-                        onClick={handleBuyNow}
-                        disabled={!isKodiValid}
-                        className={`w-full sm:flex-1 h-16 rounded-full font-black text-sm uppercase tracking-widest transition-all ${isKodiValid ? 'bg-blue text-white hover:bg-blue-dark hover:scale-[1.02] shadow-lg' : 'bg-gray-1 text-gray-3 cursor-not-allowed'}`}
-                      >
-                        BELI SEKARANG
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="p-10 border-2 border-dashed border-gray-2 rounded-2xl flex flex-col items-center justify-center text-center space-y-4">
-                    <div className="w-16 h-16 bg-gray-1 rounded-full flex items-center justify-center text-gray-3">
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
-                    </div>
-                    <div>
-                      <p className="font-bold text-[21px] text-[#212121]">Silakan Pilih Kuantitas</p>
-                      <p className="text-base text-[#212121]">Isi rincian ukuran di samping untuk memunculkan ringkasan pesanan.</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+            {/* Column 2: Summary Card + CTA Buttons */}
+            {kodiSummaryCardNode}
           </div>
         </div>
       </section>
