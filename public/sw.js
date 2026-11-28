@@ -1,3 +1,11 @@
+self.addEventListener('install', () => {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
 self.addEventListener('fetch', (event) => {
   const url = event.request.url;
 
@@ -9,8 +17,15 @@ self.addEventListener('fetch', (event) => {
   // This prevents SW errors for external URLs (mixkit.co, supabase.co, etc.)
   if (!url.startsWith(self.location.origin)) return;
 
-  // Skip Next.js internal routes (_next/static, _next/image, api)
-  if (url.includes('/_next/') || url.includes('/api/')) return;
+  // Skip Next.js internal routes (_next/static, _next/image, api, RSC prefetch)
+  if (
+    url.includes('/_next/') ||
+    url.includes('/api/') ||
+    url.includes('_rsc=') ||
+    event.request.headers.get('RSC') === '1'
+  ) {
+    return;
+  }
 
   event.respondWith(
     caches.match(event.request).then((response) => {

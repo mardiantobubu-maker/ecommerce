@@ -74,18 +74,33 @@ const Header = ({ initialCategories = [] }: { initialCategories?: any[] }) => {
 
     const saved = localStorage.getItem("locationPermission");
 
-    if (saved === "granted") {
-      // Sudah pernah izinkan → langsung ambil lokasi
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          fetchCityFromCoords(position.coords.latitude, position.coords.longitude);
-        },
-        () => setUserLocation("Indonesia")
-      );
-    } else if (!saved) {
-      // Belum pernah memilih → tampilkan modal kita
-      setTimeout(() => setShowLocationModal(true), 10000);
-    }
+    const requestLocationIfAllowed = async () => {
+      try {
+        if (navigator.permissions && navigator.permissions.query) {
+          const perm = await navigator.permissions.query({ name: "geolocation" });
+          if (perm.state === "denied") {
+            localStorage.setItem("locationPermission", "denied");
+            setUserLocation("Indonesia");
+            return;
+          }
+        }
+      } catch {
+        // Ignore browsers that don't support permissions.query for geolocation
+      }
+
+      if (saved === "granted") {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            fetchCityFromCoords(position.coords.latitude, position.coords.longitude);
+          },
+          () => setUserLocation("Indonesia")
+        );
+      } else if (!saved) {
+        setTimeout(() => setShowLocationModal(true), 10000);
+      }
+    };
+
+    requestLocationIfAllowed();
     // Jika saved === "denied" → biarkan default "Indonesia"
   }, []);
 
